@@ -246,11 +246,11 @@ Truy cập: **http://localhost:5000**
 
 | Vai trò | Username | Password | Mô tả |
 |---|---|---|---|
-| 🔑 Admin | `admin` | `admin@123` | Toàn quyền quản trị |
-| 👤 Lễ tân | `letan1` | `letan@123` | Quyền lễ tân |
-| 👤 Lễ tân | `letan2` | `letan@123` | Quyền lễ tân |
+| 🔑 Admin | `admin` | `Admin@123` | Toàn quyền quản trị |
+| 👤 Lễ tân | `letan1` | `Letan@123` | Quyền lễ tân |
+| 👤 Lễ tân | `letan2` | `Letan@123` | Quyền lễ tân |
 
-> ⚠️ **Lưu ý:** Hãy đổi mật khẩu mặc định ngay sau khi đăng nhập lần đầu!
+> ⚠️ **Lưu ý:** Hãy đổi mật khẩu mặc định ngay sau khi đăng nhập lần đầu và vui lòng nhập đúng mật khẩu , sai quá 3 lần khóa tài khoản!
 
 ---
 
