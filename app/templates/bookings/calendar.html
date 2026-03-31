@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Lịch đặt phòng{% endblock %}
+{% block page_title %}Lịch đặt phòng{% endblock %}
+{% block breadcrumb %}
+  <a href="{{ url_for('bookings.index') }}" class="hover:text-sienna">Đặt phòng</a> / Lịch
+{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-body">
+    <div class="text-sm text-mocha">Màn hình lịch đặt phòng (calendar) có thể mở rộng thêm theo nhu cầu.</div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Báo cáo{% endblock %}
+{% block page_title %}Báo cáo{% endblock %}
+{% block breadcrumb %}Doanh thu{% endblock %}
+
+{% block topbar_actions %}
+<a class="btn btn-outline" href="{{ url_for('reports.export', type='revenue', month=month, year=year) }}">
+  <i class="fas fa-file-excel"></i> Export Excel
+</a>
+{% endblock %}
+
+{% block content %}
+<div class="card mb-5">
+  <div class="card-body py-4">
+    <form method="GET" class="flex flex-wrap gap-3 items-end">
+      <div class="w-32">
+        <label class="form-label">Tháng</label>
+        <input type="number" name="month" class="form-input" min="1" max="12" value="{{ month }}">
+      </div>
+      <div class="w-36">
+        <label class="form-label">Năm</label>
+        <input type="number" name="year" class="form-input" min="2000" max="2100" value="{{ year }}">
+      </div>
+      <div>
+        <label class="form-label">&nbsp;</label>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-filter"></i> Xem</button>
+      </div>
+      <div class="ml-auto text-sm text-mocha">
+        Tổng: <span class="font-semibold text-espresso">{{ total | currency }}</span>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h3 class="font-semibold text-espresso" style="font-family:var(--font-serif)">
+      Doanh thu tháng {{ month }}/{{ year }}
+    </h3>
+  </div>
+  <div class="card-body">
+    <canvas id="revByDay"></canvas>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const ctx = document.getElementById('revByDay').getContext('2d');
+new Chart(ctx, {
+  type: 'bar',
+  data: { labels: {{ labels|tojson }}, datasets: [{
+    data: {{ data|tojson }},
+    backgroundColor: 'rgba(139,111,71,.18)',
+    borderColor: '#8B6F47',
+    borderWidth: 1.5,
+  }]},
+  options: { plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } }, y: { beginAtZero: true } } }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+{% block title %}Quản lý phòng{% endblock %}
+{% block page_title %}Quản lý phòng{% endblock %}
+{% block breadcrumb %}Danh sách tất cả phòng{% endblock %}
+
+{% block topbar_actions %}
+{% if current_user.is_admin %}
+<a href="{{ url_for('rooms.create') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Thêm phòng</a>
+<a href="{{ url_for('rooms.floor_map') }}" class="btn btn-outline"><i class="fas fa-th-large"></i> Sơ đồ tầng</a>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="card mb-5">
+  <div class="card-body py-4">
+    <form method="GET" class="flex flex-wrap gap-3 items-end">
+      <div class="flex-1 min-w-48">
+        <label class="form-label">Tìm kiếm</label>
+        <div class="search-bar">
+          <i class="fas fa-search"></i>
+          <input type="text" name="q" placeholder="Số phòng..." value="{{ request.args.get('q','') }}">
+        </div>
+      </div>
+      <div class="w-28">
+        <label class="form-label">Tầng</label>
+        <select name="floor" class="form-input">
+          <option value="">Tất cả</option>
+          {% for f in floors %}
+          <option value="{{ f }}" {% if request.args.get('floor')==f|string %}selected{% endif %}>Tầng {{ f }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="w-40">
+        <label class="form-label">Trạng thái</label>
+        <select name="status" class="form-input">
+          <option value="">Tất cả</option>
+          {% for code, label in [('AVAILABLE','Trống'),('RESERVED','Đã đặt'),('OCCUPIED','Đang ở'),('CLEANING','Đang dọn'),('MAINTENANCE','Bảo trì')] %}
+          <option value="{{ code }}" {% if request.args.get('status')==code %}selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="w-44">
+        <label class="form-label">Loại giường</label>
+        <select name="bed_type" class="form-input">
+          <option value="">Tất cả</option>
+          {% for code, label in [('SINGLE','Phòng đơn'),('DOUBLE','Phòng đôi'),('TWIN','Twin'),('TRIPLE','Triple'),('SUITE','Suite'),('PRESIDENTIAL','Presidential'),('FAMILY','Gia đình')] %}
+          <option value="{{ code }}" {% if request.args.get('bed_type')==code %}selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div>
+        <label class="form-label">&nbsp;</label>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-filter"></i> Lọc</button>
+        <a href="{{ url_for('rooms.index') }}" class="btn btn-outline ml-2"><i class="fas fa-times"></i></a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="table-wrapper">
+  <table class="hms-table">
+    <thead>
+      <tr>
+        <th>Số phòng</th><th>Tầng</th><th>Hạng phòng</th><th>Loại giường</th><th>Trạng thái</th><th>Giá/đêm</th><th>Ảnh</th>
+        {% if current_user.is_admin %}<th class="text-center">Thao tác</th>{% endif %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for room in rooms.items %}
+      <tr id="room-row-{{ room.id }}">
+        <td>
+          <div class="flex items-center gap-3">
+            {% if room.image_paths and room.image_paths[0] %}
+            <img src="{{ url_for('static', filename=room.image_paths[0]) }}"
+                 class="w-10 h-10 rounded-lg object-cover border border-parchment"
+                 onerror="this.src='{{ url_for('static', filename='images/default/room.png') }}'">
+            {% else %}
+            <div class="w-10 h-10 rounded-lg bg-ivory border border-parchment flex items-center justify-center">
+              <i class="fas fa-bed text-tan text-sm"></i>
+            </div>
+            {% endif %}
+            <span class="font-serif font-semibold text-espresso text-lg">{{ room.room_number }}</span>
+          </div>
+        </td>
+        <td><span class="text-sm">Tầng {{ room.floor }}</span></td>
+        <td><span class="text-sm font-medium text-espresso">{{ room.room_type.name }}</span></td>
+        <td>
+          <span class="text-sm text-mocha">
+            {% set bed_labels = {'SINGLE':'Phòng đơn','DOUBLE':'Phòng đôi','TWIN':'Twin','TRIPLE':'Triple','SUITE':'Suite','PRESIDENTIAL':'Presidential','FAMILY':'Gia đình'} %}
+            {{ bed_labels.get(room.bed_type, room.bed_type) }}
+          </span>
+        </td>
+        <td>
+          {% set status_map = {
+            'AVAILABLE':   ('available',  'Trống',      'fa-check-circle'),
+            'RESERVED':    ('reserved',   'Đã đặt',     'fa-clock'),
+            'OCCUPIED':    ('occupied',   'Đang ở',     'fa-user-check'),
+            'CLEANING':    ('cleaning',   'Đang dọn',   'fa-broom'),
+            'MAINTENANCE': ('maintenance','Bảo trì',    'fa-wrench'),
+          } %}
+          {% set cls, lbl, ico = status_map.get(room.status, ('','','fa-circle')) %}
+          <span class="badge badge-{{ cls }}"><i class="fas {{ ico }}"></i> {{ lbl }}</span>
+        </td>
+        <td>
+          <span class="font-semibold text-sienna text-sm">{{ room.effective_price | currency('') }}</span>
+          <span class="text-xs text-mocha">/đêm</span>
+        </td>
+        <td>
+          {% if room.image_paths %}
+          <span class="text-xs text-mocha"><i class="fas fa-images mr-1"></i>{{ room.image_paths|length }} ảnh</span>
+          {% else %}
+          <span class="text-xs text-tan">Chưa có ảnh</span>
+          {% endif %}
+        </td>
+        {% if current_user.is_admin %}
+        <td>
+          <div class="flex items-center gap-1.5 justify-center">
+            <a href="{{ url_for('rooms.edit', id=room.id) }}" class="btn btn-outline btn-icon btn-sm" title="Sửa">
+              <i class="fas fa-edit text-xs"></i>
+            </a>
+            <button onclick="ajaxDelete('{{ url_for('rooms.delete', id=room.id) }}', '#room-row-{{ room.id }}', 'Xóa phòng {{ room.room_number }}? Dữ liệu sẽ được ẩn đi.')"
+                    class="btn btn-danger btn-icon btn-sm" title="Xóa">
+              <i class="fas fa-trash text-xs"></i>
+            </button>
+          </div>
+        </td>
+        {% endif %}
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="8" class="text-center py-16">
+          <p class="text-mocha">Không tìm thấy phòng nào.</p>
+          {% if current_user.is_admin %}
+          <a href="{{ url_for('rooms.create') }}" class="btn btn-primary mt-3"><i class="fas fa-plus"></i> Thêm phòng</a>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {% if rooms.pages > 1 %}
+  <div class="pagination">
+    <span class="text-xs text-mocha mr-3">{{ rooms.total }} kết quả — Trang {{ rooms.page }}/{{ rooms.pages }}</span>
+    {% if rooms.has_prev %}
+      <a href="{{ url_for('rooms.index', page=rooms.prev_num, q=request.args.get('q',''), floor=request.args.get('floor',''), status=request.args.get('status',''), bed_type=request.args.get('bed_type','')) }}"
+         class="page-btn"><i class="fas fa-chevron-left text-xs"></i></a>
+    {% endif %}
+    {% for p in rooms.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+      {% if p %}
+        <a href="{{ url_for('rooms.index', page=p, q=request.args.get('q',''), floor=request.args.get('floor',''), status=request.args.get('status',''), bed_type=request.args.get('bed_type','')) }}"
+           class="page-btn {% if p == rooms.page %}active{% endif %}">{{ p }}</a>
+      {% else %}
+        <span class="page-btn disabled">…</span>
+      {% endif %}
+    {% endfor %}
+    {% if rooms.has_next %}
+      <a href="{{ url_for('rooms.index', page=rooms.next_num, q=request.args.get('q',''), floor=request.args.get('floor',''), status=request.args.get('status',''), bed_type=request.args.get('bed_type','')) }}"
+         class="page-btn"><i class="fas fa-chevron-right text-xs"></i></a>
+    {% endif %}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

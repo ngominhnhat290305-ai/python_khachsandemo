@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %}Khách hàng{% endblock %}
+{% block page_title %}Khách hàng{% endblock %}
+{% block breadcrumb %}Danh sách khách hàng{% endblock %}
+
+{% block topbar_actions %}
+<a href="{{ url_for('customers.create') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Thêm khách</a>
+{% endblock %}
+
+{% block content %}
+<div class="card mb-5">
+  <div class="card-body py-4">
+    <form method="GET" class="flex flex-wrap gap-3 items-end">
+      <div class="flex-1 min-w-56">
+        <label class="form-label">Tìm kiếm</label>
+        <div class="search-bar"><i class="fas fa-search"></i><input type="text" name="q" value="{{ request.args.get('q','') }}" placeholder="Tên / CCCD / SĐT..."></div>
+      </div>
+      <div>
+        <label class="form-label">&nbsp;</label>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-filter"></i> Lọc</button>
+        <a href="{{ url_for('customers.index') }}" class="btn btn-outline ml-2"><i class="fas fa-times"></i></a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="table-wrapper">
+  <table class="hms-table">
+    <thead><tr><th>Khách hàng</th><th>Giấy tờ</th><th>Liên hệ</th><th>Quốc tịch</th><th class="text-center">Thao tác</th></tr></thead>
+    <tbody>
+      {% for c in customers.items %}
+      <tr id="cus-row-{{ c.id }}">
+        <td>
+          <div class="flex items-center gap-3">
+            <img src="{{ url_for('static', filename=c.avatar_path or 'images/default/avatar.png') }}"
+                 class="w-10 h-10 rounded-full object-cover border border-parchment"
+                 onerror="this.src='{{ url_for('static', filename='images/default/avatar.png') }}'">
+            <div>
+              <div class="font-semibold text-espresso">{{ c.full_name }}</div>
+              <div class="text-xs text-mocha">{{ c.gender }}{% if c.date_of_birth %} · {{ c.date_of_birth | fdate }}{% endif %}</div>
+            </div>
+          </div>
+        </td>
+        <td class="text-sm text-mocha">{{ c.id_type }}: {{ c.id_number }}</td>
+        <td class="text-sm text-mocha">
+          <div>{{ c.phone or '—' }}</div>
+          <div>{{ c.email or '—' }}</div>
+        </td>
+        <td class="text-sm text-mocha">{{ c.nationality or '—' }}</td>
+        <td>
+          <div class="flex items-center gap-1.5 justify-center">
+            <a href="{{ url_for('customers.detail', id=c.id) }}" class="btn btn-outline btn-sm">Xem</a>
+            <a href="{{ url_for('customers.edit', id=c.id) }}" class="btn btn-outline btn-icon btn-sm" title="Sửa"><i class="fas fa-edit text-xs"></i></a>
+            {% if current_user.is_admin %}
+            <button class="btn btn-danger btn-icon btn-sm" title="Xóa"
+                    onclick="ajaxDelete('{{ url_for('customers.delete', id=c.id) }}', '#cus-row-{{ c.id }}', 'Xóa khách hàng {{ c.full_name }}?')">
+              <i class="fas fa-trash text-xs"></i>
+            </button>
+            {% endif %}
+          </div>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="5" class="text-center py-12 text-mocha">Chưa có khách hàng</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {% if customers.pages > 1 %}
+  <div class="pagination">
+    <span class="text-xs text-mocha mr-3">{{ customers.total }} kết quả — Trang {{ customers.page }}/{{ customers.pages }}</span>
+    {% if customers.has_prev %}
+      <a href="{{ url_for('customers.index', page=customers.prev_num, q=request.args.get('q','')) }}" class="page-btn"><i class="fas fa-chevron-left text-xs"></i></a>
+    {% endif %}
+    {% for p in customers.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+      {% if p %}
+        <a href="{{ url_for('customers.index', page=p, q=request.args.get('q','')) }}" class="page-btn {% if p == customers.page %}active{% endif %}">{{ p }}</a>
+      {% else %}
+        <span class="page-btn disabled">…</span>
+      {% endif %}
+    {% endfor %}
+    {% if customers.has_next %}
+      <a href="{{ url_for('customers.index', page=customers.next_num, q=request.args.get('q','')) }}" class="page-btn"><i class="fas fa-chevron-right text-xs"></i></a>
+    {% endif %}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

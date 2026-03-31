@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Tạo booking{% endblock %}
+{% block page_title %}Tạo booking{% endblock %}
+{% block breadcrumb %}
+  <a href="{{ url_for('bookings.index') }}" class="hover:text-sienna">Đặt phòng</a> / Tạo mới
+{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl">
+  <form method="POST" class="card">
+    <div class="card-header">
+      <h3 class="font-semibold text-espresso" style="font-family:var(--font-serif)">
+        <i class="fas fa-calendar-check text-sienna mr-2"></i>Thông tin booking
+      </h3>
+    </div>
+    <div class="card-body">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div class="form-group md:col-span-2">
+          <label class="form-label">Khách hàng <span class="required">*</span></label>
+          <select name="customer_id" class="form-input" required>
+            <option value="">— Chọn khách hàng —</option>
+            {% for c in customers %}
+            <option value="{{ c.id }}">{{ c.full_name }} ({{ c.id_number }})</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group md:col-span-2">
+          <label class="form-label">Phòng <span class="required">*</span></label>
+          <select name="room_id" class="form-input" required>
+            <option value="">— Chọn phòng —</option>
+            {% for r in rooms %}
+            <option value="{{ r.id }}">Phòng {{ r.room_number }} · Tầng {{ r.floor }} · {{ r.room_type.name }} · {{ r.effective_price | currency('') }}/đêm</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Ngày nhận phòng <span class="required">*</span></label>
+          <input type="date" name="check_in_date" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Ngày trả phòng <span class="required">*</span></label>
+          <input type="date" name="check_out_date" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Người lớn</label>
+          <input type="number" name="num_adults" class="form-input" min="1" value="1">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Trẻ em</label>
+          <input type="number" name="num_children" class="form-input" min="0" value="0">
+        </div>
+        <div class="form-group md:col-span-2">
+          <label class="form-label">Tiền cọc</label>
+          <input type="text" name="deposit_amount" class="form-input" inputmode="numeric" autocomplete="off" data-money="vnd" value="0">
+        </div>
+        <div class="form-group md:col-span-2">
+          <label class="form-label">Yêu cầu đặc biệt</label>
+          <textarea name="special_requests" class="form-input" rows="2"></textarea>
+        </div>
+      </div>
+
+      <div class="flex gap-3 mt-2">
+        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Tạo booking</button>
+        <a href="{{ url_for('bookings.index') }}" class="btn btn-outline"><i class="fas fa-times"></i> Huỷ</a>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,901 @@
+\documentclass[13pt,a4paper]{extreport}
+
+% Hướng dẫn dùng XeLaTeX trên Overleaf để hỗ trợ Times New Roman
+\usepackage[a4paper,top=2.5cm,bottom=2.5cm,left=3.5cm,right=2cm]{geometry}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+
+\usepackage[unicode]{hyperref}
+\usepackage{setspace}
+\linespread{1.2}
+
+\usepackage{titlesec}
+% Định dạng chương theo chuẩn: CHƯƠNG 1 (giữa, đậm, cỡ 14)
+\titleformat{\chapter}[display]
+  {\bfseries\centering\fontsize{14pt}{17pt}\selectfont}
+  {CHƯƠNG \thechapter}{1ex}{}
+\titleformat{\section}{\bfseries\large}{\thesection}{1em}{}
+\titleformat{\subsection}{\bfseries\normalsize}{\thesubsection}{1em}{}
+
+% Giảm khoảng trống trước tiêu đề chương để bố cục gọn hơn
+\titlespacing*{\chapter}{0pt}{0pt}{18pt}
+
+\usepackage{tocloft}
+\renewcommand{\cftchapfont}{\bfseries}
+\renewcommand{\cftchappagefont}{\bfseries}
+% Đặt cỡ chữ mục lục (các mục, tiểu mục) về \normalsize ~ 13pt
+\renewcommand{\cftsecfont}{\normalsize}
+\renewcommand{\cftsecpagefont}{\normalsize}
+\renewcommand{\cftsubsecfont}{\normalsize}
+\renewcommand{\cftsubsecpagefont}{\normalsize}
+
+% Chỉ hiển thị số trang ở giữa chân trang, không có header
+\pagestyle{plain}
+
+\setlength{\parindent}{1cm}
+\setlength{\parskip}{6pt}
+
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{float}
+
+% Đổi nhãn Figure/Table sang Hình/Bảng
+\renewcommand{\figurename}{Hình}
+\renewcommand{\tablename}{Bảng}
+
+%========================================
+% THÔNG TIN ĐỀ TÀI
+%========================================
+\newcommand{\TenDeTai}{XÂY DỰNG HỆ THỐNG QUẢN LÝ KHÁCH SẠN}
+\newcommand{\Khoa}{CÔNG NGHỆ THÔNG TIN}
+\newcommand{\Truong}{TRƯỜNG ĐẠI HỌC NAM CẦN THƠ}
+\newcommand{\SVOne}{Nguyễn Văn Khánh}
+\newcommand{\SVTwo}{}
+\newcommand{\Lop}{CNTT Kxx}
+\newcommand{\GVHD}{ThS.\ ................................}
+
+\begin{document}
+
+%========================================
+% BÌA CHÍNH
+%========================================
+\begin{titlepage}
+  \begin{center}
+    {\large \Truong}\\[6pt]
+    {\large KHOA \Khoa}\\[3cm]
+
+    {\Large\bfseries BÁO CÁO ĐỀ TÀI}\\[1cm]
+    {\Large\bfseries \TenDeTai}\\[3cm]
+
+    \begin{tabular}{ll}
+      Sinh viên thực hiện: & \SVOne \\
+      Lớp:                 & \Lop \\
+      GV hướng dẫn:        & \GVHD \\
+    \end{tabular}
+
+    \vfill
+    {\large Cần Thơ, 2026}
+  \end{center}
+\end{titlepage}
+
+%========================================
+% BÌA PHỤ
+%========================================
+\begin{titlepage}
+  \begin{center}
+    {\large \Truong}\\[6pt]
+    {\large KHOA \Khoa}\\[3cm]
+
+    {\Large\bfseries BÁO CÁO ĐỀ TÀI}\\[1cm]
+    {\Large\bfseries \TenDeTai}\\[3cm]
+
+    \vfill
+    {\large Cần Thơ, 2026}
+  \end{center}
+\end{titlepage}
+
+%========================================
+% LỜI CẢM TẠ
+%========================================
+\pagenumbering{roman}
+
+\chapter*{LỜI CẢM TẠ}
+\addcontentsline{toc}{chapter}{LỜI CẢM TẠ}
+
+Trong suốt thời gian học tập tại Trường Đại học Nam Cần Thơ và quá trình thực hiện báo cáo đề tài với nội dung \emph{\TenDeTai}, em đã nhận được rất nhiều sự quan tâm, giúp đỡ từ quý thầy cô, gia đình và bạn bè.
+
+Trước hết, em xin bày tỏ lòng biết ơn sâu sắc đến \GVHD, người đã tận tình hướng dẫn, định hướng và góp ý một cách chi tiết, giúp em định hình được cấu trúc đề tài, tổ chức mã nguồn hợp lý và hoàn thiện nội dung báo cáo.
+
+Em cũng xin chân thành cảm ơn toàn thể quý thầy cô trong khoa \Khoa\ đã tận tâm giảng dạy, truyền đạt cho em kiến thức chuyên môn cũng như những kinh nghiệm thực tiễn quý báu trong suốt thời gian học tập. Đây là nền tảng quan trọng để em có thể vận dụng vào việc xây dựng hệ thống web trong đề tài này.
+
+Bên cạnh đó, em xin gửi lời cảm ơn đến gia đình và bạn bè đã luôn động viên, tạo điều kiện cả về vật chất và tinh thần, là chỗ dựa vững chắc để em yên tâm học tập và nghiên cứu.
+
+Mặc dù em đã cố gắng hoàn thành đề tài một cách tốt nhất, nhưng do hạn chế về thời gian, kinh nghiệm và kiến thức, báo cáo khó tránh khỏi những thiếu sót. Em rất mong nhận được những ý kiến đóng góp của quý thầy cô để có thể hoàn thiện hơn trong tương lai.
+
+\vspace{1cm}
+\hfill Cần Thơ, năm 2026
+
+\hfill Sinh viên thực hiện
+
+%========================================
+% LỜI CAM ĐOAN
+%========================================
+\chapter*{LỜI CAM ĐOAN}
+\addcontentsline{toc}{chapter}{LỜI CAM ĐOAN}
+
+Em xin cam đoan đề tài \emph{\TenDeTai} là kết quả lao động khoa học của riêng em dưới sự hướng dẫn của \GVHD. Các số liệu, kết quả, hình ảnh, sơ đồ và đoạn mã nguồn trình bày trong báo cáo này là trung thực, được thu thập và xử lý từ quá trình nghiên cứu, phân tích nhu cầu thực tế của bài toán quản lý khách sạn và cài đặt hệ thống dựa trên nền tảng \emph{Flask} và cơ sở dữ liệu \emph{MySQL}. Những tài liệu tham khảo, nội dung trích dẫn từ các nguồn khác đều được trích dẫn rõ ràng trong phần Tài liệu tham khảo.
+
+Sinh viên hoàn toàn chịu trách nhiệm trước nhà trường về lời cam đoan này.
+
+\vspace{1cm}
+\hfill Cần Thơ, năm 2026
+
+\hfill Sinh viên thực hiện
+
+%========================================
+% NHẬN XÉT CƠ QUAN THỰC TẬP
+%========================================
+\chapter*{NHẬN XÉT CỦA CƠ QUAN THỰC TẬP}
+\addcontentsline{toc}{chapter}{NHẬN XÉT CỦA CƠ QUAN THỰC TẬP}
+
+% (Để trống để in và xin nhận xét)
+
+%========================================
+% MỤC LỤC, DANH MỤC
+%========================================
+\tableofcontents
+\addcontentsline{toc}{chapter}{MỤC LỤC}
+\clearpage
+
+\listoftables
+\addcontentsline{toc}{chapter}{DANH MỤC BẢNG}
+\clearpage
+
+\listoffigures
+\addcontentsline{toc}{chapter}{DANH MỤC HÌNH}
+\clearpage
+
+\chapter*{DANH MỤC TỪ VIẾT TẮT}
+\addcontentsline{toc}{chapter}{DANH MỤC TỪ VIẾT TẮT}
+
+\begin{longtable}{p{3cm}p{10cm}}
+  HMS   & Hotel Management System (Hệ thống quản lý khách sạn)\\
+  BFD   & Business Function Diagram (Sơ đồ phân rã chức năng)\\
+  DFD   & Data Flow Diagram (Sơ đồ luồng dữ liệu)\\
+  ERD   & Entity Relationship Diagram (Sơ đồ thực thể -- liên kết)\\
+  ORM   & Object--Relational Mapping (Kỹ thuật ánh xạ đối tượng--quan hệ)\\
+  REST  & Representational State Transfer (Phong cách kiến trúc dịch vụ web)\\
+  CRUD  & Create, Read, Update, Delete (Các thao tác dữ liệu cơ bản)\\
+\end{longtable}
+
+%========================================
+% NỘI DUNG CHÍNH
+%========================================
+\clearpage
+\pagenumbering{arabic}
+
+%---------------------------------------
+\chapter{GIỚI THIỆU}
+%---------------------------------------
+
+\section{Lý do chọn đề tài}
+
+Trong thực tế vận hành của một khách sạn, việc quản lý phòng, khách hàng, lịch đặt phòng và hóa đơn là những nghiệp vụ xảy ra liên tục và có mức độ liên kết rất cao. Nếu quản lý thủ công bằng sổ sách hoặc bảng tính rời rạc, nhân viên dễ gặp các vấn đề như trùng lịch đặt phòng, cập nhật trạng thái phòng không kịp thời, thất lạc thông tin khách, hoặc tổng hợp doanh thu sai lệch do dữ liệu nằm ở nhiều nơi. Những sai sót này không chỉ làm giảm hiệu quả vận hành tại quầy lễ tân mà còn ảnh hưởng trực tiếp đến trải nghiệm của khách hàng khi nhận phòng, trả phòng và thanh toán.
+
+Đặc thù của khách sạn là trạng thái phòng thay đổi theo thời gian thực và phụ thuộc chặt chẽ vào luồng nghiệp vụ: đặt phòng, xác nhận, check-in, khách sử dụng dịch vụ, check-out và thanh toán. Khi số lượng phòng và lượng booking tăng lên, việc theo dõi bằng mắt thường trở nên khó khăn; chỉ cần nhầm một mốc ngày hoặc nhầm trạng thái là có thể dẫn đến tình huống overbooking hoặc để phòng trống không tối ưu. Ngoài ra, quản lý cũng cần báo cáo theo tháng/năm để nhìn ra xu hướng doanh thu, hiệu suất phòng và dịch vụ phổ biến, từ đó điều chỉnh giá và chính sách phù hợp.
+
+Xuất phát từ nhu cầu đó, em chọn đề tài \emph{\TenDeTai} với mục tiêu xây dựng một hệ thống web gọn nhẹ, dễ triển khai, phục vụ tốt cho quy mô khách sạn vừa và nhỏ. Hệ thống tập trung vào các nghiệp vụ cốt lõi của khách sạn và được thiết kế để mở rộng dần trong tương lai, đồng thời tận dụng ưu điểm của mô hình ứng dụng web: truy cập bằng trình duyệt, cập nhật tập trung và phù hợp triển khai trong môi trường nội bộ.
+
+\section{Mục tiêu đề tài}
+
+\subsection{Mục tiêu tổng quát}
+
+Mục tiêu tổng quát của đề tài là xây dựng một hệ thống web giúp tin học hóa hoạt động quản lý khách sạn, bao gồm quản lý hạng phòng, phòng, khách hàng, đặt phòng (booking), check-in/check-out, dịch vụ sử dụng và hóa đơn thanh toán, kèm theo báo cáo doanh thu cho quản trị viên. Hệ thống được thiết kế theo kiến trúc client--server, trong đó lớp giao diện người dùng được xây dựng bằng \emph{Flask} kết hợp \emph{HTML/CSS} và \emph{TailwindCSS}, còn dữ liệu được lưu trữ tập trung trên \emph{MySQL} và được truy xuất thông qua ORM \emph{SQLAlchemy}. Thông qua hệ thống, nhân viên lễ tân có thể thao tác nhanh tại quầy, còn quản trị viên có thể theo dõi tổng quan tình hình vận hành và doanh thu theo thời gian.
+
+\subsection{Mục tiêu cụ thể}
+
+Về mặt cụ thể, đề tài hướng tới việc thiết kế mô hình dữ liệu phản ánh đúng các thực thể và mối quan hệ quan trọng trong khách sạn, bao gồm nhân viên, hạng phòng, phòng, khách hàng, booking, dịch vụ, chi tiết dịch vụ theo booking và hóa đơn. Trên cơ sở mô hình dữ liệu đó, hệ thống hiện thực các chức năng nghiệp vụ theo đúng vòng đời của booking và trạng thái phòng, đồng thời bảo đảm nguyên tắc không đặt trùng lịch theo khoảng ngày trên cùng một phòng.
+
+Tiếp theo, hệ thống xây dựng cơ chế phân quyền cho hai vai trò chính là quản trị viên và lễ tân. Lễ tân tập trung vào nghiệp vụ tại quầy như tạo booking, xác nhận, check-in/check-out, quản lý khách hàng và thao tác hóa đơn trong phạm vi được phép; quản trị viên có quyền quản trị nhân viên, cấu hình dữ liệu phòng/hạng phòng, quản lý dịch vụ và xem báo cáo tổng hợp. Cách tiếp cận này giúp thao tác đúng trách nhiệm và hạn chế rủi ro khi vận hành.
+
+Cuối cùng, đề tài bổ sung các chức năng hỗ trợ trải nghiệm sử dụng và tài liệu hóa, bao gồm định dạng tiền tệ khi nhập liệu trên giao diện, cơ chế upload hình ảnh phòng, và trợ lý AI nội bộ có thể truy vấn cơ sở dữ liệu để trả lời nhanh các câu hỏi dạng thống kê (phòng đắt nhất, hóa đơn cao nhất, doanh thu theo thời gian, dịch vụ phổ biến). Các màn hình tiêu biểu được chụp tự động để minh họa cho báo cáo.
+
+\section{Phạm vi và phương pháp nghiên cứu}
+
+Đề tài tập trung vào việc xây dựng hệ thống quản lý cho một khách sạn đơn lẻ, chưa xét đến các bài toán tích hợp phức tạp như liên thông đa chi nhánh, đồng bộ với kênh OTA, quản lý tồn kho theo chuỗi hay tích hợp cổng thanh toán tự động. Việc giới hạn phạm vi giúp em tập trung đi sâu vào các nghiệp vụ lõi của khách sạn: quản lý phòng/hạng phòng, khách hàng, đặt phòng, check-in/check-out, dịch vụ, hóa đơn và báo cáo doanh thu. Các nội dung như tích hợp hệ thống khóa cửa, kiosk tự check-in hoặc kết nối kế toán được xem là hướng phát triển trong tương lai.
+
+Về mặt kỹ thuật, hệ thống sử dụng ngôn ngữ \emph{Python} và thư viện \emph{Flask} để xây dựng ứng dụng web, kết hợp với \emph{Jinja2} cho phần template giao diện. Cơ sở dữ liệu được triển khai trên \emph{MySQL} với ORM \emph{SQLAlchemy} và cơ chế migration bằng \emph{Flask-Migrate}. Phần giao diện sử dụng \emph{TailwindCSS} giúp xây dựng các thành phần UI nhanh và nhất quán. Đề tài sử dụng \emph{Playwright} để tự động hóa việc điều hướng và chụp hình minh họa giao diện theo tài khoản quản trị, đồng thời tích hợp \emph{OpenAI API} cho trợ lý AI nội bộ ở mức hỗ trợ nghiệp vụ và thống kê.
+
+Phương pháp nghiên cứu được lựa chọn theo hướng kết hợp giữa nghiên cứu tài liệu, mô hình hóa hệ thống và thực nghiệm kỹ thuật. Trước hết, em tham khảo các quy trình nghiệp vụ phổ biến trong khách sạn đối với đặt phòng, check-in/check-out, quản lý trạng thái phòng và thanh toán hóa đơn. Trên cơ sở đó, em mô tả lại yêu cầu chức năng và phi chức năng theo cách có thể triển khai được trong phạm vi đề tài, ưu tiên tính rõ ràng, tính nhất quán và khả năng kiểm thử.
+
+Tiếp theo, nhóm sử dụng các kỹ thuật phân tích và mô hình hóa hệ thống quen thuộc trong lĩnh vực công nghệ thông tin. Yêu cầu chức năng và phi chức năng được tổng hợp và trình bày lại dưới dạng Use Case, từ đó xây dựng các sơ đồ Use Case, sơ đồ luồng dữ liệu (DFD), sơ đồ thực thể--liên kết (ERD) và sơ đồ lớp. Những mô hình này không chỉ hỗ trợ việc hình dung cấu trúc và luồng xử lý của hệ thống mà còn đóng vai trò như tài liệu trao đổi với người dùng và giảng viên hướng dẫn trong quá trình rà soát yêu cầu.
+
+Cuối cùng, hệ thống được cài đặt thử nghiệm với dữ liệu seed gần với tình huống vận hành thực tế: danh sách phòng theo tầng, một số khách hàng mẫu, booking ở nhiều trạng thái và hóa đơn phát sinh khi check-out. Các kịch bản kiểm thử được thiết kế xoay quanh việc tránh trùng lịch đặt phòng, kiểm soát trạng thái booking/phòng, tính hóa đơn theo tiền phòng và dịch vụ, và đối chiếu báo cáo doanh thu theo khoảng thời gian. Kết quả kiểm thử được đối chiếu với yêu cầu để đánh giá mức độ đáp ứng của hệ thống và rút ra hướng phát triển trong tương lai.
+
+\section{Cấu trúc báo cáo đề tài}
+
+Báo cáo đề tài được bố cục thành bảy chương liên kết chặt chẽ với nhau. Chương~1 trình bày lý do chọn đề tài, mục tiêu, phạm vi và phương pháp nghiên cứu, đồng thời nêu bối cảnh vận hành của bài toán quản lý khách sạn. Chương~2 trình bày cơ sở lý thuyết và các công nghệ được sử dụng trong đề tài như Python, Flask, SQLAlchemy, MySQL, TailwindCSS, đồng thời giới thiệu các khái niệm nền phục vụ việc triển khai hệ thống quản lý. Chương~3 tập trung vào phân tích và thiết kế hệ thống, mô tả các yêu cầu chức năng, phi chức năng và trình bày các sơ đồ Use Case, BFD, DFD, ERD và sơ đồ lớp cho hệ thống. Chương~4 trình bày thiết kế giao diện và kiến trúc dự án, minh họa các màn hình chính bằng bộ ảnh chụp tự động. Chương~5 trình bày quá trình xây dựng hệ thống, cách tổ chức mã nguồn Flask, migration/seed cơ sở dữ liệu và hiện thực một số nghiệp vụ cốt lõi như đặt phòng, check-in/check-out và tạo hóa đơn. Chương~6 đánh giá hệ thống dựa trên các kịch bản kiểm thử, phân tích ưu điểm và hạn chế. Cuối cùng, Chương~7 đưa ra kết luận và hướng phát triển trong tương lai.
+
+%---------------------------------------
+\chapter{CƠ SỞ LÝ THUYẾT VÀ CÔNG NGHỆ}
+%---------------------------------------
+
+\section{Kiến trúc client--server và ứng dụng web}
+
+Hệ thống quản lý khách sạn trong đề tài được xây dựng theo mô hình client--server cổ điển, trong đó trình duyệt web đóng vai trò client, gửi các yêu cầu HTTP tới máy chủ ứng dụng Flask. Máy chủ chịu trách nhiệm xử lý nghiệp vụ, truy xuất cơ sở dữ liệu MySQL và trả về trang HTML đã được render sẵn cho client. Cách tiếp cận này phù hợp với ứng dụng quản lý nội bộ: người dùng chỉ cần một trình duyệt để truy cập; việc cập nhật hệ thống được thực hiện tập trung; dữ liệu được lưu trữ đồng bộ, tránh phân tán giữa nhiều file.
+
+Về mặt kỹ thuật, các request từ trình duyệt được gửi theo giao thức HTTP/HTTPS tới các route được định nghĩa trong Flask. Mỗi route tương ứng với một hàm xử lý trong blueprint, tiếp nhận tham số từ URL, từ query string hoặc từ form, sau đó gọi tới các lớp model và service để thực hiện nghiệp vụ. Kết quả xử lý được gói lại dưới dạng dữ liệu truyền cho template Jinja2, nơi xây dựng lại trang HTML hoàn chỉnh để trả về cho trình duyệt. Mô hình này giúp phân tách rõ ràng giữa phần trình bày và phần xử lý, đồng thời phù hợp với đặc thù của các ứng dụng quản lý nội bộ, nơi yêu cầu phản hồi theo dạng trang hoàn chỉnh vẫn rất phổ biến.
+
+Trong lớp trình bày, đề tài sử dụng Flask kết hợp với engine template Jinja2 và bộ thư viện giao diện TailwindCSS. Các template được tổ chức theo layout chính, chia sẻ phần header, sidebar điều hướng và vùng nội dung, trong khi các trang chức năng như Dashboard, Phòng, Khách hàng, Booking, Hóa đơn, Dịch vụ, Báo cáo và Trợ lý được xây dựng dưới dạng các block nội dung riêng. Nhờ TailwindCSS, giao diện giữ được phong cách hiện đại, nhất quán và dễ điều chỉnh thông qua các lớp tiện ích thay vì phải viết quá nhiều CSS thuần, đồng thời thuận tiện cho việc mở rộng thêm màn hình khi hệ thống phát triển.
+
+\section{Flask, SQLAlchemy và MySQL}
+
+Flask là một micro–framework cho Python, cung cấp những thành phần tối thiểu cần thiết để xây dựng ứng dụng web nhưng cho phép lập trình viên linh hoạt trong việc lựa chọn kiến trúc và thư viện đi kèm. Bản thân Flask cung cấp routing, template engine (thông qua Jinja2) và các tiện ích cơ bản; các chức năng như đăng nhập, migration cơ sở dữ liệu và mã hóa mật khẩu được bổ sung qua extension. Trong đề tài, Flask được sử dụng kết hợp với Flask-Login để quản lý phiên đăng nhập, Flask-Migrate để quản lý migration cơ sở dữ liệu và Flask-Bcrypt để băm mật khẩu; dữ liệu biểu mẫu được xử lý thông qua \texttt{request.form} và các hàm kiểm tra đầu vào.
+
+SQLAlchemy được sử dụng như một lớp ORM để ánh xạ các lớp Python sang bảng trong MySQL. Các thực thể chính như \texttt{User}, \texttt{RoomType}, \texttt{Room}, \texttt{Customer}, \texttt{Booking}, \texttt{Service}, \texttt{BookingService} và \texttt{Invoice} được định nghĩa trong thư mục \texttt{app/models}, đi kèm các ràng buộc khóa ngoại giữa phòng, khách hàng, booking, dịch vụ và hóa đơn. Mỗi lớp model khai báo các trường dữ liệu với kiểu tương ứng và thiết lập mối quan hệ một-nhiều hoặc nhiều-một thông qua thuộc tính \texttt{relationship}. Nhờ ORM, tầng xử lý nghiệp vụ làm việc trên các đối tượng Python một cách trực quan, trong khi SQLAlchemy đảm nhận việc sinh câu lệnh SQL, giúp giảm sai sót và dễ bảo trì khi phát triển hệ thống.
+
+MySQL được lựa chọn vì đây là hệ quản trị cơ sở dữ liệu quan hệ phổ biến, dễ triển khai, phù hợp với các ứng dụng vừa và nhỏ. Cấu hình kết nối được quản lý thông qua tệp \texttt{.env}, cho phép thay đổi thông tin kết nối mà không cần sửa mã nguồn. Các migration được quản lý bằng Flask-Migrate/Alembic, giúp việc thay đổi cấu trúc bảng theo quá trình phát triển trở nên an toàn và có kiểm soát. Nhờ cơ chế migration, mỗi lần bổ sung trường dữ liệu hoặc bảng mới, nhóm chỉ cần định nghĩa model tương ứng và sinh migration, sau đó áp dụng lên cơ sở dữ liệu; quá trình này vừa đảm bảo đồng bộ giữa mã nguồn và cấu trúc bảng, vừa giúp dễ dàng quay lại phiên bản trước nếu cần.
+
+\section{Xác thực và phân quyền}
+
+Đối với hệ thống quản lý khách sạn, việc kiểm soát truy cập theo vai trò là hết sức quan trọng vì dữ liệu phòng, khách hàng, hóa đơn và báo cáo đều mang tính nhạy cảm. Trong đề tài, cơ chế đăng nhập được hiện thực bằng Flask-Login, lưu trạng thái đăng nhập trong session của trình duyệt. Khi người dùng nhập tên đăng nhập và mật khẩu, hệ thống kiểm tra cặp thông tin này với dữ liệu lưu trong bảng \texttt{users}; nếu hợp lệ và tài khoản đang hoạt động, Flask-Login tạo một session gắn với người dùng hiện tại, từ đó các request sau chỉ cần mang theo cookie phiên để chứng minh danh tính. Mật khẩu được băm bằng \texttt{Flask-Bcrypt}, tránh lưu trữ dưới dạng văn bản thuần, đồng thời hệ thống giới hạn số lần đăng nhập sai để giảm rủi ro dò mật khẩu.
+
+Các route quan trọng đều được bảo vệ bằng decorator \texttt{@login\_required} của Flask-Login, đảm bảo chỉ người dùng đã xác thực mới truy cập được. Phân quyền được thực hiện dựa trên thuộc tính \texttt{role} với hai vai trò chính là \texttt{ADMIN} và \texttt{RECEPTIONIST}. Các phân hệ quản trị như quản lý nhân viên (\texttt{/users}), quản lý hạng phòng (\texttt{/room-types}) và báo cáo (\texttt{/reports}) chỉ cho phép Admin truy cập. Lễ tân tập trung vào nghiệp vụ tại quầy như quản lý khách hàng, đặt phòng, check-in/check-out và hóa đơn trong phạm vi được phép; một số thao tác nhạy cảm như reset mật khẩu nhân viên chỉ là quyền của Admin. Cách tiếp cận này giúp hệ thống vận hành đúng vai trò và giảm nguy cơ thao tác sai đối với những chức năng ảnh hưởng trực tiếp đến dữ liệu quan trọng.
+
+\section{Đặc thù nghiệp vụ khách sạn}
+
+Nghiệp vụ khách sạn có một số đặc thù khiến bài toán quản lý khác biệt so với các mô hình bán lẻ thông thường. Trước hết, tài nguyên cốt lõi của khách sạn là ``phòng'' và ``thời gian sử dụng phòng''. Một phòng chỉ có thể phục vụ một booking trong một khoảng thời gian, vì vậy quy tắc quan trọng nhất của hệ thống đặt phòng là không được phép đặt trùng lịch trên cùng phòng. Điều này đòi hỏi hệ thống phải kiểm tra xung đột theo khoảng ngày nhận/trả trước khi cho phép tạo hoặc chỉnh sửa booking.
+
+Thứ hai, vòng đời của booking gắn liền với các mốc vận hành tại quầy lễ tân. Booking thường đi qua các trạng thái \texttt{PENDING}, \texttt{CONFIRMED}, \texttt{CHECKED\_IN}, \texttt{CHECKED\_OUT} và có thể bị \texttt{CANCELLED} trước khi check-in. Mỗi lần chuyển trạng thái đều kéo theo cập nhật trạng thái phòng tương ứng như \texttt{RESERVED}, \texttt{OCCUPIED}, \texttt{AVAILABLE} hoặc \texttt{CLEANING}. Việc quản lý trạng thái đúng giúp tránh nhầm lẫn giữa các bộ phận và giúp quản trị theo dõi công suất phòng chính xác.
+
+Thứ ba, bài toán thanh toán trong khách sạn thường bao gồm nhiều thành phần chi phí. Ngoài tiền phòng tính theo số đêm và giá/đêm, khách có thể sử dụng thêm các dịch vụ như ăn sáng, giặt ủi, đưa đón hoặc các dịch vụ khác. Do đó, hóa đơn cần tổng hợp tiền phòng, tiền dịch vụ, áp dụng VAT và trừ tiền cọc nếu có. Việc tự động hóa tính toán hóa đơn khi check-out giúp giảm sai sót so với thao tác thủ công và giúp quy trình thanh toán diễn ra nhanh chóng.
+
+Cuối cùng, dữ liệu khách hàng và lịch sử booking là thông tin quan trọng phục vụ chăm sóc khách hàng và đối chiếu khi cần. Hệ thống cần lưu trữ đầy đủ thông tin nhận diện cơ bản như họ tên, giấy tờ tùy thân, số điện thoại, email và quốc tịch. Việc tổ chức dữ liệu theo chuẩn quan hệ giúp tra cứu nhanh theo nhiều tiêu chí, đồng thời tạo nền tảng cho các thống kê như top khách chi tiêu cao hoặc dịch vụ phổ biến.
+
+%---------------------------------------
+\chapter{PHÂN TÍCH VÀ THIẾT KẾ HỆ THỐNG}
+%---------------------------------------
+
+\section{Phân tích yêu cầu}
+
+Hệ thống quản lý khách sạn được xây dựng để phục vụ hai nhóm người dùng chính là Admin và Lễ tân. Lễ tân là người trực tiếp thao tác ở quầy với tần suất cao, tập trung vào các màn hình khách hàng, booking, check-in/check-out, hóa đơn và các tra cứu nhanh liên quan đến phòng; do đó giao diện cần đơn giản, nhất quán và phản hồi nhanh để không làm chậm quá trình phục vụ khách. Admin ngoài việc có thể thực hiện các thao tác như lễ tân còn có nhu cầu quản trị dữ liệu nền (nhân viên, hạng phòng, phòng, dịch vụ), xem báo cáo doanh thu và thống kê, vì vậy hệ thống cần cung cấp các màn hình tổng hợp số liệu, công cụ lọc theo thời gian và cơ chế phân quyền rõ ràng.
+
+Từ nhu cầu thực tế nói trên, hệ thống phải đáp ứng các yêu cầu chức năng cốt lõi. Trước hết là quản lý phòng và hạng phòng, cho phép khai báo giá/đêm, số người tối đa, tiện nghi, trạng thái phòng và hình ảnh minh họa. Tiếp theo là quản lý khách hàng, lưu trữ thông tin định danh cơ bản và hiển thị lịch sử booking. Trọng tâm của hệ thống là quản lý booking theo vòng đời trạng thái từ \texttt{PENDING} đến \texttt{CHECKED\_OUT}, trong đó hệ thống bắt buộc kiểm tra trùng lịch theo khoảng ngày trên cùng một phòng. Khi khách check-in/check-out, trạng thái booking và phòng phải được cập nhật đồng bộ. Ngoài ra, hệ thống cho phép ghi nhận dịch vụ khách sử dụng khi đang ở và tự động tạo hóa đơn khi check-out để tổng hợp tiền phòng, tiền dịch vụ, VAT và tiền cọc.
+
+Ngoài các nghiệp vụ trực tiếp, hệ thống cần cung cấp cho Admin các số liệu tổng hợp như doanh thu theo ngày/tháng/năm, số lượng booking theo trạng thái, và các thống kê liên quan đến dịch vụ và khách hàng. Các báo cáo nên hiển thị dưới dạng bảng và biểu đồ trực quan để hỗ trợ đánh giá hiệu quả vận hành. Bên cạnh đó, hệ thống có module quản lý nhân viên nhằm tạo mới tài khoản, khóa/mở, đặt lại mật khẩu và phân quyền; đây là cơ sở để kiểm soát trách nhiệm của từng nhân viên đối với các nghiệp vụ đã thực hiện.
+
+Trong quá trình phân tích yêu cầu, đề tài đặt ra một số giả định để phù hợp phạm vi triển khai. Hệ thống được xây dựng cho một khách sạn đơn lẻ và các nghiệp vụ phát sinh được xử lý trong nội bộ. Các tích hợp nâng cao như đồng bộ kênh OTA, quản lý chuỗi khách sạn, kết nối khóa cửa hoặc cổng thanh toán tự động không nằm trong phạm vi hiện tại. Ngoài ra, lịch đặt phòng được quản lý theo đơn vị ngày (ngày nhận và ngày trả) để đơn giản hóa mô hình và phù hợp với thực tế vận hành phổ biến.
+
+\section{Yêu cầu phi chức năng}
+
+Bên cạnh các yêu cầu chức năng, hệ thống quản lý khách sạn còn phải đáp ứng các yêu cầu phi chức năng để vận hành ổn định và dễ sử dụng. Về khả năng sử dụng, giao diện cần trực quan để nhân viên mới có thể thao tác sau thời gian hướng dẫn ngắn; các màn hình dùng phong cách trình bày thống nhất và các nút thao tác theo vòng đời booking được đặt ở vị trí dễ thấy. Thông báo lỗi được viết bằng tiếng Việt, nêu rõ nguyên nhân như trùng lịch đặt phòng, dữ liệu bắt buộc còn thiếu hoặc trạng thái không cho phép thao tác.
+
+Về hiệu năng, hệ thống được thiết kế để phục vụ quy mô khách sạn vừa và nhỏ, nơi các thao tác quan trọng như tra cứu phòng, tạo booking và mở hóa đơn phải có thời gian phản hồi nhanh. Khi dữ liệu booking và hóa đơn tăng dần theo thời gian, các truy vấn lọc theo ngày, theo trạng thái và theo phòng cần được tối ưu và có chỉ mục phù hợp trong MySQL để đảm bảo trải nghiệm sử dụng ổn định.
+
+Về an toàn và bảo mật, hệ thống cần bảo đảm thông tin khách hàng và hóa đơn chỉ được truy cập bởi những nhân sự có thẩm quyền. Kênh giao tiếp giữa trình duyệt và máy chủ cần cấu hình HTTPS khi triển khai thực tế. Mật khẩu người dùng được băm bằng thuật toán mạnh và hệ thống giới hạn số lần đăng nhập sai. Các thao tác nhạy cảm như reset mật khẩu, khóa/mở tài khoản và xác nhận thanh toán cần được kiểm soát theo quyền. Ngoài ra, dữ liệu cần được sao lưu định kỳ để phòng ngừa rủi ro mất mát do sự cố phần cứng hoặc lỗi vận hành.
+
+\section{Use Case tổng quan}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{diagrams/hms_usecase_overall.png}
+  \caption{Use Case tổng quan hệ thống quản lý khách sạn}
+  \label{fig:uc_overall}
+\end{figure}
+
+\section{Use Case phân rã nghiệp vụ đặt phòng và hóa đơn}
+
+Hình~\ref{fig:uc_booking_invoice} mô tả Use Case phân rã xoay quanh nghiệp vụ đặt phòng và hóa đơn, với hai tác nhân chính là Admin và Lễ tân. Use Case trung tâm là luồng đặt phòng từ tạo booking, xác nhận/huỷ đến check-in/check-out. Trong luồng này, hệ thống bắt buộc kiểm tra phòng trống theo khoảng ngày và gắn booking với hồ sơ khách hàng, do đó các bước này được mô hình hóa bằng quan hệ \emph{include}. Khi check-out, hệ thống tự động tạo hóa đơn dựa trên tiền phòng và dịch vụ sử dụng; các bước tính tiền phòng, tính tiền dịch vụ và áp dụng VAT/giảm giá cũng là các bước \emph{include} vì chúng luôn xảy ra trong quá trình lập hóa đơn. Chức năng in hóa đơn được mô hình hóa dưới dạng \emph{extend} vì không bắt buộc trong mọi trường hợp thanh toán nhưng thường được sử dụng để đối chiếu.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{diagrams/hms_usecase_decomposed.png}
+  \caption{Use Case phân rã nghiệp vụ đặt phòng và hóa đơn}
+  \label{fig:uc_booking_invoice}
+\end{figure}
+
+\section{Sơ đồ chức năng (BFD)}
+
+Để mô tả cách hệ thống được phân rã thành các nhóm chức năng nghiệp vụ, đề tài sử dụng sơ đồ phân rã chức năng (BFD). Ở mức 0, hệ thống được xem như một khối chức năng lớn có nhiệm vụ quản lý toàn bộ hoạt động của khách sạn. Hình~\ref{fig:bfd0} trình bày các nhóm chức năng chính: xác thực và người dùng, quản lý nhân viên, quản lý phòng/hạng phòng, quản lý khách hàng, quản lý booking, quản lý hóa đơn, quản lý dịch vụ, báo cáo và trợ lý AI nội bộ.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{diagrams/hms_bfd_level0.png}
+  \caption{BFD mức 0 – Chức năng tổng quát của hệ thống}
+  \label{fig:bfd0}
+\end{figure}
+
+BFD mức 1 (hình~\ref{fig:bfd1}) đi sâu hơn vào chức năng ``Quản lý booking'', tách thành các chức năng con như tra cứu phòng trống, tạo booking, xác nhận/huỷ, check-in, ghi nhận dịch vụ theo booking và check-out tạo hóa đơn. Cách phân rã này giúp làm rõ phạm vi trách nhiệm của từng nhóm chức năng, thuận tiện cho việc triển khai và kiểm thử theo từng module.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\textwidth,height=0.78\textheight,keepaspectratio]{diagrams/hms_bfd_level1.png}
+  \caption{BFD mức 1 – Phân rã chức năng quản lý booking}
+  \label{fig:bfd1}
+\end{figure}
+
+Ở mức 2, đề tài tập trung vào chức năng ``Check-out \& tạo hóa đơn''. Hình~\ref{fig:bfd2} cho thấy chức năng này tiếp tục được chia thành các bước xử lý nhỏ hơn như xác thực điều kiện booking, tính tiền phòng theo số đêm, tính tiền dịch vụ, áp dụng VAT/giảm giá, trừ tiền cọc và xác nhận thanh toán theo phương thức. Việc phân rã đến mức 2 giúp việc hiện thực và kiểm thử từng phần trở nên rõ ràng, đồng thời bảo đảm luồng nghiệp vụ quan trọng nhất của khách sạn được mô hình hóa đầy đủ.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\textwidth,height=0.78\textheight,keepaspectratio]{diagrams/hms_bfd_level2.png}
+  \caption{BFD mức 2 – Phân rã chức năng check-out và tạo hóa đơn}
+  \label{fig:bfd2}
+\end{figure}
+
+\section{Đặc tả một số Use Case chính}
+
+\subsection*{Đăng nhập hệ thống}
+
+\begin{table}[H]
+\centering
+\caption{Đặc tả Use Case: Đăng nhập hệ thống}
+\label{tab:uc-login}
+\begin{tabular}{p{4cm}p{10cm}}
+\hline
+Tên Use Case & Đăng nhập hệ thống\\
+\hline
+Tác nhân chính & Admin, Lễ tân\\
+Mục tiêu & Xác thực tài khoản người dùng trước khi cho phép truy cập các chức năng quản lý.\\
+Tiền điều kiện & Tài khoản đã được tạo và đang ở trạng thái hoạt động.\\
+Kết quả & Người dùng đăng nhập thành công và được chuyển đến màn hình Dashboard.\\
+\hline
+Luồng sự kiện chính &
+\begin{enumerate}
+\item Người dùng truy cập trang \texttt{/login} và nhập tên đăng nhập, mật khẩu.
+\item Hệ thống kiểm tra thông tin nhập vào, tìm kiếm người dùng tương ứng trong cơ sở dữ liệu.
+\item Nếu thông tin hợp lệ và tài khoản đang hoạt động, Flask-Login tạo phiên làm việc và lưu thông tin người dùng vào session.
+\item Hệ thống chuyển hướng người dùng tới trang Dashboard.
+\end{enumerate}\\
+\hline
+Luồng ngoại lệ &
+Nếu tên đăng nhập hoặc mật khẩu không chính xác, hoặc tài khoản đã bị khóa, hệ thống hiển thị thông báo lỗi ``Sai tên đăng nhập hoặc mật khẩu'' và giữ nguyên tại trang đăng nhập.\\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection*{Tạo booking}
+
+\begin{table}[H]
+\centering
+\caption{Đặc tả Use Case: Tạo booking}
+\label{tab:uc-booking}
+\begin{tabular}{p{4cm}p{10cm}}
+\hline
+Tên Use Case & Tạo booking\\
+\hline
+Tác nhân chính & Lễ tân, Admin\\
+Mục tiêu & Ghi nhận yêu cầu đặt phòng của khách theo khoảng ngày và phòng cụ thể.\\
+Tiền điều kiện & Người dùng đã đăng nhập; phòng và hạng phòng đã có trong hệ thống.\\
+Kết quả & Booking được tạo với mã booking tự sinh và trạng thái ban đầu \texttt{PENDING}.\\
+\hline
+Luồng sự kiện chính &
+\begin{enumerate}
+  \item Người dùng truy cập trang \texttt{/bookings/create}.
+  \item Người dùng chọn khách hàng từ danh sách hoặc tạo mới khách hàng nếu chưa có.
+  \item Người dùng chọn phòng, nhập ngày nhận/trả, số người, tiền cọc và yêu cầu đặc biệt (nếu có).
+  \item Hệ thống kiểm tra không đặt trùng lịch theo khoảng ngày trên cùng phòng.
+  \item Nếu hợp lệ, hệ thống sinh mã booking theo ngày, lưu booking và chuyển hướng đến trang chi tiết booking.
+\end{enumerate}\\
+\hline
+Luồng ngoại lệ &
+Nếu phòng bị trùng lịch hoặc ngày nhận/trả không hợp lệ (ít hơn 1 đêm), hệ thống hiển thị thông báo lỗi và không lưu booking.\\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection*{Check-in}
+
+\begin{table}[H]
+\centering
+\caption{Đặc tả Use Case: Check-in}
+\label{tab:uc-checkin}
+\begin{tabular}{p{4cm}p{10cm}}
+\hline
+Tên Use Case & Check-in\\
+\hline
+Tác nhân chính & Lễ tân, Admin\\
+Mục tiêu & Xác nhận khách đến nhận phòng và bắt đầu thời gian lưu trú.\\
+Tiền điều kiện & Booking ở trạng thái \texttt{CONFIRMED}.\\
+Kết quả & Booking chuyển sang \texttt{CHECKED\_IN} và phòng chuyển sang trạng thái \texttt{OCCUPIED}.\\
+\hline
+Luồng sự kiện chính &
+\begin{enumerate}
+  \item Người dùng mở trang chi tiết booking \texttt{/bookings/\{id\}}.
+  \item Người dùng nhấn nút ``Check-in'' và xác nhận thao tác.
+  \item Hệ thống cập nhật thời điểm check-in thực tế, đổi trạng thái booking sang \texttt{CHECKED\_IN}.
+  \item Hệ thống cập nhật trạng thái phòng sang \texttt{OCCUPIED} để phản ánh phòng đang có khách.
+\end{enumerate}\\
+\hline
+Luồng ngoại lệ &
+Nếu booking chưa được xác nhận hoặc đã bị huỷ/đã check-in trước đó, hệ thống từ chối thao tác và hiển thị thông báo phù hợp.\\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection*{Check-out và tạo hóa đơn}
+
+\begin{table}[H]
+\centering
+\caption{Đặc tả Use Case: Check-out và tạo hóa đơn}
+\label{tab:uc-checkout}
+\begin{tabular}{p{4cm}p{10cm}}
+\hline
+Tên Use Case & Check-out và tạo hóa đơn\\
+\hline
+Tác nhân chính & Lễ tân, Admin\\
+Mục tiêu & Kết thúc lưu trú, tính tiền phòng và dịch vụ, tạo hóa đơn để thanh toán.\\
+Tiền điều kiện & Booking đang ở trạng thái \texttt{CHECKED\_IN}.\\
+Kết quả & Booking chuyển sang \texttt{CHECKED\_OUT}, hóa đơn được tạo tự động và phòng chuyển sang \texttt{CLEANING} hoặc \texttt{AVAILABLE}.\\
+\hline
+Luồng sự kiện chính &
+\begin{enumerate}
+  \item Người dùng mở trang chi tiết booking và nhấn nút ``Check-out''.
+  \item Hệ thống tính số đêm, tổng tiền phòng theo giá/đêm và tổng tiền dịch vụ đã ghi nhận.
+  \item Hệ thống áp dụng VAT, trừ tiền cọc, tạo hóa đơn và sinh mã hóa đơn.
+  \item Hệ thống cập nhật trạng thái booking sang \texttt{CHECKED\_OUT} và cập nhật trạng thái phòng phù hợp.
+  \item Hệ thống chuyển hướng đến trang chi tiết hóa đơn để người dùng xác nhận thanh toán hoặc in hóa đơn.
+\end{enumerate}\\
+\hline
+Luồng ngoại lệ &
+Nếu booking chưa check-in hoặc đã check-out trước đó, hệ thống không cho phép tạo hóa đơn lần nữa và hiển thị thông báo.\\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection*{Quản lý khách hàng}
+
+\begin{table}[H]
+\centering
+\caption{Đặc tả Use Case: Quản lý khách hàng}
+\label{tab:uc-customers}
+\begin{tabular}{p{4cm}p{10cm}}
+\hline
+Tên Use Case & Quản lý khách hàng\\
+\hline
+Tác nhân chính & Lễ tân, Admin\\
+Mục tiêu & Lưu trữ và tra cứu thông tin khách hàng phục vụ cho việc đặt phòng và lập hóa đơn.\\
+Tiền điều kiện & Người dùng đã đăng nhập hệ thống.\\
+Kết quả & Thông tin khách hàng được thêm mới, chỉnh sửa hoặc xem chi tiết theo yêu cầu.\\
+\hline
+Luồng sự kiện chính &
+\begin{enumerate}
+  \item Người dùng truy cập màn hình ``Khách hàng'' từ menu điều hướng.
+  \item Hệ thống hiển thị danh sách khách hàng kèm các trường cơ bản như họ tên, số điện thoại, CMND/CCCD.
+  \item Khi cần thêm mới, người dùng nhấn nút ``Thêm khách hàng'', nhập thông tin và bấm lưu.
+  \item Khi cần chỉnh sửa, người dùng chọn một dòng trong bảng, nhấn ``Sửa'' và cập nhật lại thông tin cần thiết.
+  \item Khi cần tra cứu, người dùng sử dụng ô tìm kiếm theo tên hoặc số điện thoại, hệ thống lọc danh sách tương ứng.
+\end{enumerate}\\
+\hline
+Luồng ngoại lệ &
+Nếu người dùng nhập trùng số CMND/CCCD (hoặc hộ chiếu) đã tồn tại, hệ thống hiển thị thông báo lỗi và yêu cầu kiểm tra lại thông tin.\\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection*{Báo cáo doanh thu}
+
+\begin{table}[H]
+\centering
+\caption{Đặc tả Use Case: Báo cáo doanh thu}
+\label{tab:uc-reports}
+\begin{tabular}{p{4cm}p{10cm}}
+\hline
+Tên Use Case & Báo cáo doanh thu\\
+\hline
+Tác nhân chính & Admin\\
+Mục tiêu & Tổng hợp doanh thu theo khoảng thời gian để đánh giá hiệu quả vận hành khách sạn.\\
+Tiền điều kiện & Người dùng đăng nhập với vai trò Admin.\\
+Kết quả & Hệ thống hiển thị biểu đồ và bảng số liệu doanh thu theo tháng trong năm được chọn.\\
+\hline
+Luồng sự kiện chính &
+\begin{enumerate}
+  \item Quản lý truy cập màn hình ``Báo cáo''.
+  \item Người dùng chọn năm cần xem báo cáo, nhấn nút ``Xem''.
+  \item Hệ thống truy vấn bảng \texttt{invoices} (trạng thái đã thanh toán), tính tổng doanh thu cho từng tháng.
+  \item Kết quả được biểu diễn dưới dạng biểu đồ cột và bảng chi tiết bên dưới.
+  \item Quản lý có thể dựa vào số liệu để so sánh hoạt động giữa các tháng và đưa ra quyết định điều chỉnh phù hợp.
+\end{enumerate}\\
+\hline
+Luồng ngoại lệ &
+Nếu trong năm được chọn chưa có dữ liệu, hệ thống hiển thị thông báo ``Chưa có dữ liệu để báo cáo'' và không vẽ biểu đồ.\\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection*{Quản lý nhân viên}
+
+\begin{table}[H]
+\centering
+\caption{Đặc tả Use Case: Quản lý nhân viên}
+\label{tab:uc-users}
+\begin{tabular}{p{4cm}p{10cm}}
+\hline
+Tên Use Case & Quản lý nhân viên\\
+\hline
+Tác nhân chính & Admin\\
+Mục tiêu & Tạo, chỉnh sửa và khóa/mở tài khoản nhân viên để kiểm soát quyền truy cập hệ thống.\\
+Tiền điều kiện & Người dùng đăng nhập với vai trò Admin.\\
+Kết quả & Danh sách tài khoản nhân viên được cập nhật đúng với tình hình nhân sự thực tế.\\
+\hline
+Luồng sự kiện chính &
+\begin{enumerate}
+  \item Quản lý truy cập màn hình ``Nhân viên''.
+  \item Hệ thống hiển thị danh sách tài khoản nhân viên kèm tên đăng nhập, họ tên, vai trò và trạng thái.
+  \item Khi cần tạo mới, quản lý nhấn nút ``Thêm nhân viên'', nhập thông tin cần thiết và lưu lại.
+  \item Khi cần khóa hoặc mở khóa tài khoản, quản lý nhấn nút tương ứng trên dòng nhân viên, hệ thống cập nhật trạng thái \texttt{is\_active}.
+  \item Khi cần đặt lại mật khẩu, quản lý sử dụng chức năng ``Reset mật khẩu'' để hệ thống sinh mật khẩu mới và thông báo cho nhân viên.
+\end{enumerate}\\
+\hline
+Luồng ngoại lệ &
+Nếu Admin cố gắng khóa tài khoản của chính mình hoặc tài khoản quản trị duy nhất, hệ thống từ chối thao tác và hiển thị thông báo cảnh báo.\\
+\hline
+\end{tabular}
+\end{table}
+
+\section{Mô hình dữ liệu và sơ đồ lớp}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{diagrams/hms_erd.png}
+  \caption{Sơ đồ ERD hệ thống quản lý khách sạn}
+  \label{fig:erd}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{diagrams/hms_class.png}
+  \caption{Sơ đồ lớp các thực thể chính của hệ thống quản lý khách sạn}
+  \label{fig:class_domain}
+\end{figure}
+
+Sơ đồ ERD ở hình~\ref{fig:erd} mô tả các bảng chính trong cơ sở dữ liệu và mối quan hệ giữa chúng. Thực thể \texttt{RoomType} liên kết một-nhiều với \texttt{Room} để mô tả hạng phòng và các phòng thuộc hạng đó. Thực thể \texttt{Customer} liên kết một-nhiều với \texttt{Booking}, phản ánh việc một khách hàng có thể đặt nhiều lần theo thời gian. Thực thể \texttt{Booking} liên kết nhiều-một với \texttt{Room} và \texttt{User} (người tạo booking), đồng thời liên kết một-nhiều với \texttt{BookingService} để lưu lịch sử dịch vụ khách sử dụng trong thời gian lưu trú. Khi booking check-out, hệ thống tạo một bản ghi \texttt{Invoice} theo quan hệ một-một với booking để tổng hợp tiền phòng, tiền dịch vụ, VAT và trạng thái thanh toán.
+
+Sơ đồ lớp ở hình~\ref{fig:class_domain} chi tiết hóa các thuộc tính và mối quan hệ ở mức hướng đối tượng trong mã nguồn Python. Các lớp \texttt{User}, \texttt{RoomType}, \texttt{Room}, \texttt{Customer}, \texttt{Booking}, \texttt{Service}, \texttt{BookingService} và \texttt{Invoice} tương ứng với các bảng trong MySQL và được triển khai bằng SQLAlchemy. Việc duy trì sự tương ứng chặt chẽ giữa ERD và sơ đồ lớp giúp quá trình triển khai trở nên rõ ràng, đồng thời giảm khả năng xảy ra sai lệch giữa thiết kế và hiện thực khi mở rộng hệ thống.
+
+\section{Sơ đồ luồng dữ liệu (DFD)}
+
+Song song với BFD và ERD, sơ đồ luồng dữ liệu (DFD) cung cấp một góc nhìn khác về hệ thống, tập trung vào các tiến trình xử lý, luồng dữ liệu và kho dữ liệu. DFD mức 0 (hình~\ref{fig:dfd0}) mô tả hệ thống quản lý khách sạn như một tiến trình duy nhất, tương tác với các tác nhân bên ngoài là khách hàng, lễ tân và admin. Luồng dữ liệu chính bao gồm thông tin khách hàng, yêu cầu đặt phòng, cập nhật trạng thái booking/phòng, dữ liệu hóa đơn và báo cáo doanh thu.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{diagrams/hms_dfd_level0.png}
+  \caption{DFD mức 0 – Hệ thống quản lý khách sạn}
+  \label{fig:dfd0}
+\end{figure}
+
+DFD mức 1 (hình~\ref{fig:dfd1}) phân rã hệ thống thành các tiến trình chính như quản lý người dùng, quản lý phòng/hạng phòng, quản lý khách hàng, quản lý booking, hóa đơn và dịch vụ, báo cáo và trợ lý AI. Các kho dữ liệu tương ứng là các bảng users, rooms/room\_types, customers, bookings, invoices và services/booking\_services. Sơ đồ giúp làm rõ việc dữ liệu được đọc/ghi ở đâu, tiến trình nào là nơi phát sinh dữ liệu và tiến trình nào chỉ tổng hợp để hiển thị thống kê.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{diagrams/hms_dfd_level1.png}
+  \caption{DFD mức 1 – Các tiến trình chính và kho dữ liệu}
+  \label{fig:dfd1}
+\end{figure}
+
+Đối với tiến trình quản lý booking, DFD mức 2 (hình~\ref{fig:dfd2}) đi sâu vào các tiến trình con như tra cứu phòng trống, tạo booking, xác nhận/huỷ, check-in, ghi nhận dịch vụ và check-out tạo hóa đơn. Các tiến trình này trao đổi dữ liệu chủ yếu với kho phòng, kho khách hàng, kho booking, kho dịch vụ theo booking và kho hóa đơn. Việc phân rã đến mức này giúp đối chiếu rõ ràng giữa quy tắc nghiệp vụ (không trùng lịch, chỉ thêm dịch vụ khi đang ở, tạo hóa đơn khi check-out) và hiện thực trong mã nguồn.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{diagrams/hms_dfd_level2_booking.png}
+  \caption{DFD mức 2 – Tiến trình quản lý booking}
+  \label{fig:dfd2}
+\end{figure}
+
+%---------------------------------------
+\chapter{THIẾT KẾ GIAO DIỆN VÀ KIẾN TRÚC}
+%---------------------------------------
+
+\section{Kiến trúc dự án}
+
+Hệ thống quản lý khách sạn được tổ chức theo kiến trúc một ứng dụng Flask duy nhất, chia theo các lớp logic rõ ràng để dễ bảo trì. Lớp giao diện người dùng gồm các template Jinja2 trong thư mục \texttt{app/templates}, sử dụng layout thống nhất \texttt{base.html} (sidebar, header, vùng nội dung) và các template con theo từng phân hệ như phòng, booking, hóa đơn, dịch vụ, báo cáo và trợ lý. Lớp điều khiển được tổ chức theo blueprint trong \texttt{app/blueprints}, mỗi blueprint chịu trách nhiệm cho một nhóm route rõ ràng như \texttt{auth}, \texttt{dashboard}, \texttt{rooms}, \texttt{room\_types}, \texttt{customers}, \texttt{bookings}, \texttt{invoices}, \texttt{services}, \texttt{reports} và \texttt{assistant}. Lớp dữ liệu gồm các model SQLAlchemy trong \texttt{app/models}, kết nối MySQL thông qua cấu hình trong \texttt{config.py} và các biến môi trường trong \texttt{.env}.
+
+Trong quá trình xử lý, controller tiếp nhận request, kiểm tra dữ liệu đầu vào, gọi các service nghiệp vụ và thao tác với model để truy vấn/cập nhật dữ liệu. Một số nghiệp vụ được tách ra khỏi controller dưới dạng service, ví dụ kiểm tra trùng lịch khi tạo booking, tính hóa đơn khi check-out, xử lý upload hình ảnh, và trợ lý AI nội bộ có thể truy vấn cơ sở dữ liệu để trả lời nhanh các câu hỏi thống kê. Việc tách lớp giúp code dễ đọc và giảm rủi ro khi mở rộng chức năng.
+
+\section{Một số màn hình chính của hệ thống}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{screenshots/admin/01_dashboard.png}
+  \caption{Màn hình Dashboard tổng quan (Admin)}
+  \label{fig:dashboard}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{screenshots/admin/02_assistant.png}
+  \caption{Màn hình Trợ lý AI nội bộ (Admin)}
+  \label{fig:assistant}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{screenshots/admin/03_users.png}
+  \caption{Màn hình quản lý nhân viên (Admin)}
+  \label{fig:users}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{screenshots/admin/04_room_types.png}
+  \caption{Màn hình quản lý hạng phòng (Admin)}
+  \label{fig:room_types}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{screenshots/admin/05_rooms.png}
+  \caption{Màn hình quản lý phòng (Admin)}
+  \label{fig:rooms}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{screenshots/admin/06_floor_map.png}
+  \caption{Màn hình sơ đồ tầng (Admin)}
+  \label{fig:floor_map}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{screenshots/admin/07_customers.png}
+  \caption{Màn hình quản lý khách hàng (Admin)}
+  \label{fig:customers}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{screenshots/admin/08_bookings.png}
+  \caption{Màn hình danh sách booking (Admin)}
+  \label{fig:bookings}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{screenshots/admin/09_calendar.png}
+  \caption{Màn hình lịch đặt phòng (Admin)}
+  \label{fig:calendar}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{screenshots/admin/10_invoices.png}
+  \caption{Màn hình danh sách hóa đơn (Admin)}
+  \label{fig:invoices}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{screenshots/admin/11_services.png}
+  \caption{Màn hình quản lý dịch vụ (Admin)}
+  \label{fig:services}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{screenshots/admin/12_reports.png}
+  \caption{Màn hình báo cáo doanh thu (Admin)}
+  \label{fig:reports}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{screenshots/admin/13_profile.png}
+  \caption{Màn hình hồ sơ cá nhân (Admin)}
+  \label{fig:profile}
+\end{figure}
+
+\section{Thiết kế giao diện theo từng phân hệ}
+
+Giao diện người dùng của hệ thống được thiết kế xoay quanh một layout thống nhất gồm thanh tiêu đề phía trên, thanh điều hướng bên trái và vùng nội dung chính ở giữa. Thanh điều hướng hiển thị các nhóm chức năng như ``Dashboard'', ``Trợ lý'', ``Nhân viên'', ``Hạng phòng'', ``Phòng'', ``Khách hàng'', ``Đặt phòng'', ``Hóa đơn'', ``Dịch vụ'' và ``Báo cáo''; tùy theo vai trò, một số mục quản trị sẽ ẩn với lễ tân để bảo đảm đúng phân quyền. Khi người dùng chọn một mục bất kỳ, phần nội dung được nạp lại nhưng khung layout vẫn giữ nguyên, giúp trải nghiệm sử dụng mạch lạc và nhất quán.
+
+Ở phân hệ phòng và đặt phòng, hệ thống chú trọng khả năng quan sát nhanh. Danh sách phòng cho phép lọc theo tầng, hạng phòng và trạng thái; các trạng thái được hiển thị theo badge màu để dễ nhận biết như ``Trống'', ``Đã đặt'', ``Đang có khách'', ``Đang dọn'' hoặc ``Bảo trì''. Danh sách booking cung cấp các thông tin tối thiểu cần thiết tại quầy như mã booking, phòng, khách, ngày nhận/trả và trạng thái. Trên màn hình chi tiết booking, các thao tác được gom theo vòng đời như xác nhận, check-in, thêm dịch vụ và check-out, giúp lễ tân thao tác nhanh mà vẫn tuân thủ đúng quy tắc nghiệp vụ.
+
+Phân hệ khách hàng được tổ chức theo dạng bảng với ô tìm kiếm ở phía trên, hỗ trợ tra cứu theo tên, số điện thoại hoặc giấy tờ tùy thân. Khi mở chi tiết một khách hàng, hệ thống hiển thị hồ sơ và lịch sử booking liên quan, giúp nhân viên nhanh chóng nắm được bối cảnh khi khách quay lại. Phân hệ hóa đơn hiển thị danh sách và trạng thái thanh toán, cho phép mở chi tiết để đối chiếu tiền phòng, dịch vụ, VAT và tiền cọc, đồng thời hỗ trợ in hóa đơn khi cần.
+
+Phân hệ báo cáo được thiết kế theo hướng trực quan, lấy thời gian làm tham số lọc. Quản trị viên có thể theo dõi doanh thu theo tháng trong năm được chọn, kết hợp bảng số liệu để đối chiếu và phân tích. Bên cạnh đó, hệ thống có trợ lý AI nội bộ để hỗ trợ tra cứu nhanh, trả lời các câu hỏi dạng tổng hợp dựa trên truy vấn cơ sở dữ liệu, giúp giảm thời gian tìm kiếm thủ công qua nhiều màn hình.
+
+\section{Sơ đồ triển khai hệ thống}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth,height=0.78\textheight,keepaspectratio]{diagrams/hms_deployment.png}
+  \caption{Sơ đồ triển khai hệ thống quản lý khách sạn}
+  \label{fig:deployment}
+\end{figure}
+
+%---------------------------------------
+\chapter{XÂY DỰNG HỆ THỐNG}
+%---------------------------------------
+
+Chương này trình bày quá trình hiện thực hệ thống quản lý khách sạn trên nền tảng Flask, bao gồm cấu trúc dự án, kiến trúc các thành phần, migration/seed cơ sở dữ liệu, và cách triển khai những nghiệp vụ quan trọng như đặt phòng, check-in/check-out, ghi nhận dịch vụ và tạo hóa đơn.
+
+\section{Cấu trúc dự án và tổ chức thư mục}
+
+Mã nguồn hệ thống được tổ chức trong thư mục \texttt{app} theo phong cách blueprint của Flask. Các thư mục con quan trọng bao gồm \texttt{models} (các lớp ánh xạ cơ sở dữ liệu), \texttt{blueprints} (các route theo phân hệ), \texttt{templates} (giao diện Jinja2), \texttt{services} (nghiệp vụ dùng chung), \texttt{utils} (hàm tiện ích) và \texttt{static} (CSS/JS/hình ảnh). Tập tin \texttt{config.py} và \texttt{.env} định nghĩa các thông số cấu hình như chuỗi kết nối MySQL, khóa bí mật, đường dẫn upload và cấu hình cho trợ lý AI.
+
+Trong nhóm model, lớp \texttt{RoomType} lưu trữ thông tin hạng phòng như giá/đêm và số người tối đa. Lớp \texttt{Room} mô tả phòng theo số phòng, tầng, loại giường, trạng thái và danh sách hình ảnh. Lớp \texttt{Customer} lưu thông tin khách hàng và liên kết một-nhiều với \texttt{Booking}. Lớp \texttt{Booking} thể hiện đặt phòng với mã booking, phòng, khách, người tạo, ngày nhận/trả, trạng thái và tiền cọc. Lớp \texttt{Service} và \texttt{BookingService} lưu dịch vụ và chi tiết dịch vụ theo booking. Lớp \texttt{Invoice} tổng hợp tiền phòng, tiền dịch vụ, VAT, tiền cọc và trạng thái thanh toán. Cuối cùng, lớp \texttt{User} mô tả tài khoản nhân viên với vai trò \texttt{ADMIN} hoặc \texttt{RECEPTIONIST}.
+
+\section{Mô hình kiến trúc Flask theo MVC}
+
+Xét về mặt kiến trúc, hệ thống bám khá sát mô hình MVC (Model--View--Controller) quen thuộc trong các ứng dụng web. Model được hiện thực bởi các lớp SQLAlchemy trong thư mục \texttt{app/models}, chịu trách nhiệm ánh xạ dữ liệu giữa đối tượng Python và bảng MySQL. View được đảm nhiệm bởi các template Jinja2 trong \texttt{app/templates}, nơi định nghĩa cấu trúc HTML và cách hiển thị dữ liệu cho người dùng cuối. Controller tương ứng với các blueprint trong \texttt{app/blueprints}, là nơi tiếp nhận HTTP request, kiểm tra dữ liệu, gọi service xử lý nghiệp vụ và lựa chọn template phù hợp để render.
+
+Hình~\ref{fig:architecture} mô tả mối quan hệ giữa các thành phần chính trong kiến trúc này. Ở phía trình duyệt, người dùng tương tác với giao diện HTML được kết hợp với TailwindCSS. Các yêu cầu từ trình duyệt được gửi đến các blueprint như \texttt{auth}, \texttt{dashboard}, \texttt{rooms}, \texttt{room\_types}, \texttt{customers}, \texttt{bookings}, \texttt{invoices}, \texttt{services}, \texttt{reports} và \texttt{assistant}. Mỗi blueprint đóng vai trò như một nhóm controller chuyên trách cho một phân hệ, ví dụ \texttt{bookings} xử lý luồng đặt phòng và trạng thái booking, \texttt{invoices} xử lý thanh toán và in hóa đơn, \texttt{assistant} xử lý trợ lý AI và truy vấn thống kê.
+
+Bên dưới tầng controller là các model và service. Một số nghiệp vụ phức tạp được tách ra thành service độc lập trong \texttt{app/services}, ví dụ kiểm tra trùng lịch đặt phòng, tạo hóa đơn khi check-out, xử lý upload hình ảnh và truy vấn thống kê cho trợ lý AI. Cách tổ chức này giúp controller nhẹ hơn, dễ kiểm thử và dễ mở rộng khi bổ sung thêm nghiệp vụ mới.
+
+Ở tầng thấp nhất, toàn bộ model thông qua SQLAlchemy tương tác với cơ sở dữ liệu MySQL. Kiến trúc này cho phép việc thay đổi giao diện (View) hoặc thay đổi một phần nghiệp vụ ở controller không ảnh hưởng trực tiếp tới cấu trúc dữ liệu bên dưới, đồng thời vẫn giữ được mối liên hệ chặt chẽ giữa ba phần Model--View--Controller.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{diagrams/hms_architecture.png}
+  \caption{Kiến trúc tổng thể hệ thống theo mô hình Flask MVC}
+  \label{fig:architecture}
+\end{figure}
+
+\section{Hiện thực các nghiệp vụ cốt lõi}
+
+Các nghiệp vụ chính của khách sạn được hiện thực chủ yếu trong các blueprint như \texttt{rooms}, \texttt{customers}, \texttt{bookings}, \texttt{services} và \texttt{invoices}. Khi tạo booking, hệ thống kiểm tra không đặt trùng lịch theo khoảng ngày trên cùng phòng trước khi lưu dữ liệu. Khi check-in, hệ thống cập nhật thời điểm check-in thực tế và đổi trạng thái phòng sang đang có khách. Trong thời gian lưu trú, lễ tân có thể ghi nhận dịch vụ sử dụng theo booking. Khi check-out, hệ thống tự động tạo hóa đơn dựa trên tiền phòng và dịch vụ, áp dụng VAT và trừ tiền cọc để xác định số tiền còn phải thanh toán.
+
+\section{Migration và seed dữ liệu}
+
+Để quản lý vòng đời cơ sở dữ liệu một cách nhất quán, đề tài sử dụng Flask-Migrate (Alembic) để tạo migration và cập nhật schema. Kịch bản seed dữ liệu được viết để tạo dữ liệu mẫu như tài khoản admin, lễ tân, một số hạng phòng, phòng theo tầng, khách hàng, booking và hóa đơn. Cách tiếp cận này giúp việc triển khai và kiểm thử trên môi trường mới trở nên nhanh chóng, đồng thời bảo đảm các màn hình có dữ liệu thực tế để minh họa.
+
+\section{Tích hợp trợ lý AI nội bộ}
+
+Hệ thống tích hợp một trợ lý AI nội bộ có thể trả lời bằng tiếng Việt và hiển thị kết quả dạng Markdown. Đối với các câu hỏi thống kê như phòng đắt nhất, hóa đơn cao nhất, doanh thu theo tháng hoặc dịch vụ phổ biến, hệ thống ưu tiên truy vấn cơ sở dữ liệu và trả kết quả trực tiếp để bảo đảm tính chính xác. Khi câu hỏi mang tính hướng dẫn thao tác, trợ lý cung cấp các bước thực hiện và route tương ứng trong hệ thống.
+
+\section{Tự động hóa chụp hình minh họa}
+
+Để thu thập hình ảnh minh họa giao diện một cách nhất quán, đề tài xây dựng một script Python sử dụng Playwright trong tập tin \texttt{scripts/screenshot\_admin.py}. Script tự động mở trình duyệt, đăng nhập bằng tài khoản Admin và lần lượt điều hướng qua các màn hình chính như Dashboard, quản lý nhân viên, hạng phòng, phòng, khách hàng, booking, hóa đơn, dịch vụ, báo cáo và hồ sơ. Trong quá trình di chuyển, script chụp lại từng màn hình và lưu vào thư mục \texttt{screenshots/admin} theo thứ tự. Cách tiếp cận này giúp bảo đảm hình ảnh trong báo cáo luôn khớp với giao diện thực tế của hệ thống và có thể tái sử dụng khi cần cập nhật tài liệu.
+
+\section{Sơ đồ tuần tự nghiệp vụ tạo booking}
+
+Sơ đồ tuần tự giúp làm rõ trình tự các thông điệp trao đổi giữa người dùng, giao diện và server trong một nghiệp vụ cụ thể. Hình~\ref{fig:seq_create_booking} mô tả luồng thông điệp khi lễ tân tạo booking. Giao diện gửi yêu cầu tạo booking đến backend, backend gọi service kiểm tra trùng lịch theo khoảng ngày, sau đó lưu booking và cập nhật trạng thái phòng khi hợp lệ. Nhờ đó, hệ thống đảm bảo quy tắc không đặt trùng lịch và dữ liệu được ghi nhận nhất quán trong MySQL.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{diagrams/hms_sequence_create_booking.png}
+  \caption{Sơ đồ tuần tự nghiệp vụ tạo booking}
+  \label{fig:seq_create_booking}
+\end{figure}
+
+\section{Sơ đồ tuần tự nghiệp vụ check-out và tạo hóa đơn}
+
+Hình~\ref{fig:seq_checkout} mô tả trình tự các thông điệp khi lễ tân check-out. Backend tải booking và dữ liệu dịch vụ đã sử dụng, gọi service tạo hóa đơn để tính tiền phòng, dịch vụ, VAT và số tiền còn phải thanh toán, sau đó cập nhật trạng thái booking/phòng và chuyển hướng sang trang hóa đơn. Luồng này giúp thao tác check-out nhanh, đồng thời đảm bảo số liệu hóa đơn nhất quán với dữ liệu lưu trong cơ sở dữ liệu.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{diagrams/hms_sequence_checkout_invoice.png}
+  \caption{Sơ đồ tuần tự nghiệp vụ check-out và tạo hóa đơn}
+  \label{fig:seq_checkout}
+\end{figure}
+
+%---------------------------------------
+\chapter{ĐÁNH GIÁ HỆ THỐNG}
+%---------------------------------------
+
+\section{Phương pháp đánh giá}
+
+Việc đánh giá hệ thống được thực hiện theo hướng thực nghiệm, bám sát các nghiệp vụ quan trọng nhất của khách sạn như quản lý phòng, đặt phòng, check-in/check-out, ghi nhận dịch vụ và lập hóa đơn, đồng thời kiểm tra tính đúng đắn của các báo cáo doanh thu. Em sử dụng dữ liệu seed gần với thực tế để thao tác trực tiếp trên hệ thống Flask, ghi nhận phản hồi, các lỗi phát sinh và các điểm cần cải tiến. Quy trình kiểm thử được chia thành ba nhóm: kiểm thử chức năng, kiểm thử tích hợp và kiểm thử trải nghiệm sử dụng.
+
+Đối với kiểm thử chức năng, các thao tác tạo/sửa dữ liệu cơ bản được thử với nhiều đầu vào, bao gồm cả trường hợp hợp lệ và không hợp lệ. Các quy tắc nghiệp vụ quan trọng như ``không đặt trùng lịch trên cùng phòng'', ``chỉ được check-in khi booking đã xác nhận'', ``chỉ tạo hóa đơn khi booking đang CHECKED\_IN'' và ``chỉ thêm dịch vụ khi khách đang ở'' được kiểm tra kỹ bằng các kịch bản thử.
+
+Đối với kiểm thử tích hợp, em kiểm tra sự đồng bộ giữa các phân hệ: khi tạo booking thì trạng thái phòng và danh sách booking có cập nhật đúng hay không; khi check-out thì hóa đơn có được tạo tự động và booking/phòng có chuyển trạng thái đúng hay không; khi xác nhận thanh toán thì trạng thái hóa đơn và báo cáo doanh thu có phản ánh chính xác hay không. Các phép thử này giúp bảo đảm dữ liệu luân chuyển nhất quán giữa bảng booking, hóa đơn và dịch vụ.
+
+Đối với trải nghiệm sử dụng, em kiểm tra tính trực quan của các màn hình chính, sự nhất quán của badge trạng thái (hiển thị tiếng Việt), và khả năng nhập liệu nhanh như định dạng tiền tệ theo chuẩn Việt Nam. Ngoài ra, script Playwright được dùng để chụp hình tự động nhằm bảo đảm tài liệu hóa giao diện khớp với hệ thống đang chạy.
+
+\section{Kịch bản kiểm thử chức năng}
+
+Bên cạnh việc mô tả phương pháp kiểm thử, đề tài xây dựng một số kịch bản kiểm thử hộp đen (blackbox) cho các chức năng quan trọng trên giao diện. Bảng~\ref{tab:test-functional} tổng hợp các test case tiêu biểu cho các nghiệp vụ như đăng nhập, tạo booking, kiểm tra trùng lịch, check-in/check-out, tạo hóa đơn, thanh toán và xem báo cáo. Mỗi test case mô tả dữ liệu đầu vào, các bước thực hiện và kết quả mong đợi để có thể lặp lại khi cần.
+
+\begin{table}[H]
+\centering
+\caption{Bảng kiểm thử chức năng nghiệp vụ chính}
+\label{tab:test-functional}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{p{0.8cm}p{3.2cm}p{3.5cm}p{4.2cm}p{4.3cm}}
+\hline
+STT & Chức năng & Dữ liệu đầu vào & Bước thực hiện & Kết quả mong đợi \\
+\hline
+1 & Đăng nhập hệ thống & Tên đăng nhập hợp lệ, mật khẩu đúng & Mở trang đăng nhập, nhập thông tin và nhấn ``Đăng nhập'' & Hệ thống cho phép vào Dashboard, hiển thị tên người dùng ở góc trên bên phải \\
+2 & Đăng nhập thất bại & Tên đăng nhập đúng, mật khẩu sai & Mở trang đăng nhập, nhập mật khẩu sai và nhấn ``Đăng nhập'' & Hệ thống giữ nguyên trang đăng nhập và hiển thị thông báo lỗi ``Sai tên đăng nhập hoặc mật khẩu'' \\
+3 & Tạo booking hợp lệ & Khách hàng và phòng hợp lệ, ngày nhận/trả hợp lệ & Vào \texttt{/bookings/create}, chọn khách, chọn phòng, nhập ngày nhận/trả và lưu & Booking được tạo, có mã booking và trạng thái ``Chờ xác nhận'' \\
+4 & Chặn trùng lịch booking & Có booking khác trùng ngày trên cùng phòng & Tạo booking mới trùng khoảng ngày với booking đã có & Hệ thống từ chối, hiển thị thông báo lỗi ``Phòng đã có booking trùng thời gian'' \\
+5 & Check-in hợp lệ & Booking đã xác nhận & Mở chi tiết booking, nhấn ``Check-in'' & Booking chuyển ``Đang ở'', phòng chuyển ``Đang có khách'' \\
+6 & Check-out tạo hóa đơn & Booking đang ``Đang ở'', có/không có dịch vụ & Mở chi tiết booking, nhấn ``Check-out'' & Booking chuyển ``Đã trả phòng'', hóa đơn được tạo và chuyển sang màn hình hóa đơn \\
+7 & Thanh toán hóa đơn & Hóa đơn chưa thanh toán & Mở chi tiết hóa đơn, chọn phương thức và xác nhận thanh toán & Hóa đơn chuyển ``Đã thanh toán'', ngày thanh toán được ghi nhận \\
+8 & Thêm dịch vụ khi đang ở & Booking ở trạng thái ``Đang ở'' & Mở chi tiết booking, thêm dịch vụ với số lượng & Dịch vụ được ghi nhận, tổng tiền dịch vụ cập nhật \\
+9 & Xem báo cáo doanh thu & Có hóa đơn đã thanh toán theo tháng & Mở \texttt{/reports}, chọn năm và xem & Biểu đồ và bảng doanh thu theo tháng hiển thị đúng theo dữ liệu hóa đơn \\
+10 & Trợ lý AI truy vấn thống kê & Có dữ liệu phòng/booking/hóa đơn & Mở \texttt{/assistant}, hỏi ``Phòng nào đắt nhất top 3'' & Trợ lý trả bảng kết quả tiếng Việt dựa trên truy vấn DB \\
+\hline
+\end{tabular}
+}%
+\end{table}
+
+Ngoài các test case hộp đen theo chức năng giao diện, đề tài còn kiểm tra tính đúng đắn của công thức tính hóa đơn theo số đêm và VAT. Bảng~\ref{tab:test-invoice} minh họa một vài trường hợp điển hình để đối chiếu kết quả tính toán.
+
+\begin{table}[H]
+\centering
+\caption{Bảng kiểm thử công thức tính hóa đơn}
+\label{tab:test-invoice}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{p{0.8cm}p{2.5cm}p{2.5cm}p{2.5cm}p{2.8cm}p{4.7cm}}
+\hline
+STT & Số đêm & Giá/đêm & Tiền dịch vụ & VAT & Kết quả mong đợi \\
+\hline
+1 & 2 & 1.000.000 & 0 & 10\% & Tổng = (2$\times$1.000.000 + 0) $\times$ 1.1 = 2.200.000 \\
+2 & 3 & 800.000 & 200.000 & 10\% & Tổng = (3$\times$800.000 + 200.000) $\times$ 1.1 = 2.860.000 \\
+3 & 1 & 5.000.000 & 500.000 & 10\% & Tổng = (1$\times$5.000.000 + 500.000) $\times$ 1.1 = 6.050.000 \\
+4 & 5 & 700.000 & 0 & 10\% & Tổng = (5$\times$700.000 + 0) $\times$ 1.1 = 3.850.000 \\
+\hline
+\end{tabular}
+}%
+\end{table}
+
+\section{Kết quả đánh giá}
+
+Qua quá trình thao tác thử nghiệm, hệ thống đáp ứng tương đối đầy đủ các yêu cầu đã đặt ra. Các lỗi phát hiện chủ yếu thuộc nhóm giao diện và một số trường hợp dữ liệu trống; những vấn đề này được chỉnh sửa dần trong quá trình hoàn thiện. Các chức năng quản lý phòng, khách hàng, booking, dịch vụ, hóa đơn và báo cáo hoạt động ổn định, dữ liệu được lưu trữ và truy vấn đúng. Luồng nghiệp vụ đặt phòng và check-in/check-out có cơ chế kiểm soát trạng thái rõ ràng, giúp hạn chế thao tác sai tại quầy lễ tân.
+
+Trợ lý AI nội bộ hoạt động đúng theo định hướng: trả lời tiếng Việt, hiển thị theo Markdown và ưu tiên truy vấn cơ sở dữ liệu đối với các câu hỏi thống kê để đảm bảo tính chính xác. Script Playwright chụp hình tự động giúp tài liệu hóa giao diện nhất quán với hệ thống đang chạy. Tuy nhiên, hệ thống mới được thử nghiệm ở quy mô dữ liệu vừa phải; khi triển khai thực tế với lượng booking/hóa đơn rất lớn, cần bổ sung thêm các tối ưu chỉ mục, cache hợp lý và bộ kiểm thử tự động ở mức rộng hơn.
+
+%---------------------------------------
+\chapter{KẾT LUẬN VÀ HƯỚNG PHÁT TRIỂN}
+%---------------------------------------
+
+\section{Kết luận}
+
+Đề tài \emph{\TenDeTai} đã hiện thực một hệ thống quản lý khách sạn chạy trên nền web với các module chính: quản lý nhân viên, hạng phòng, phòng, khách hàng, booking, dịch vụ, hóa đơn, báo cáo doanh thu và trợ lý AI nội bộ. Thông qua quá trình phân tích, thiết kế và triển khai, em xây dựng được một giải pháp tương đối hoàn chỉnh cho bài toán quản lý khách sạn vừa và nhỏ, thay thế phần lớn các thao tác ghi chép thủ công bằng quy trình điện tử rõ ràng, nhất quán và dễ kiểm soát.
+
+Về mặt nghiệp vụ, hệ thống quản lý được vòng đời booking từ tạo mới đến check-in/check-out, bảo đảm quy tắc không đặt trùng lịch theo khoảng ngày trên cùng một phòng và đồng bộ trạng thái phòng theo trạng thái booking. Khi check-out, hệ thống tự động tạo hóa đơn dựa trên tiền phòng và dịch vụ sử dụng, áp dụng VAT và trừ tiền cọc để xác định số tiền còn phải thanh toán. Các báo cáo doanh thu theo thời gian hỗ trợ quản trị viên theo dõi hiệu quả vận hành và ra quyết định.
+
+Về mặt kỹ thuật, việc lựa chọn Flask kết hợp với SQLAlchemy và MySQL giúp xây dựng kiến trúc gọn nhẹ nhưng đủ linh hoạt để mở rộng. Mã nguồn được tổ chức theo blueprint và phân tách rõ giữa model, controller, template và service nghiệp vụ. Hệ thống sử dụng migration để quản lý schema cơ sở dữ liệu nhất quán giữa các môi trường, đồng thời có seed dữ liệu để triển khai nhanh. Trợ lý AI nội bộ được tích hợp theo hướng an toàn, trả lời tiếng Việt và ưu tiên truy vấn DB cho các câu hỏi thống kê. Việc tự động chụp hình giao diện bằng Playwright giúp tài liệu hóa giao diện nhất quán với hệ thống thực tế.
+
+\section{Hạn chế}
+
+Mặc dù đã hoàn thành các chức năng cốt lõi, hệ thống vẫn còn một số hạn chế trong phạm vi đề tài. Trước hết, hệ thống mới hỗ trợ mô hình một khách sạn đơn lẻ và chưa tích hợp các kênh OTA hoặc các dịch vụ bên ngoài để đồng bộ đặt phòng. Lịch đặt phòng hiện ở mức cơ bản và chưa hỗ trợ thao tác kéo thả hoặc hiển thị timeline theo chuẩn của các hệ thống PMS thương mại.
+
+Thứ hai, cơ chế phân quyền hiện tập trung vào hai vai trò Admin và Lễ tân, chưa mở rộng thành hệ thống quyền chi tiết theo từng chức năng nhỏ hoặc theo phạm vi dữ liệu. Ngoài ra, hệ thống chưa được kiểm thử hiệu năng với dữ liệu rất lớn hoặc nhiều người dùng đồng thời; bộ kiểm thử tự động mới ở mức phục vụ chụp hình và một số kiểm tra cơ bản, chưa bao phủ hết các kịch bản nghiệp vụ phức tạp.
+
+\section{Hướng phát triển}
+
+Trong tương lai, hệ thống có thể mở rộng theo nhiều hướng cả về nghiệp vụ lẫn kỹ thuật. Một hướng quan trọng là hoàn thiện module lịch đặt phòng theo dạng calendar đầy đủ, hỗ trợ kéo thả booking, hiển thị theo ngày/tuần và cảnh báo xung đột trực quan. Hệ thống cũng có thể mở rộng thêm các báo cáo chuyên sâu như công suất phòng, doanh thu theo loại phòng và phân tích dịch vụ.
+
+Về tích hợp, hệ thống có thể kết nối kênh OTA hoặc cổng thanh toán để đồng bộ đặt phòng và tự động cập nhật trạng thái thanh toán. Ngoài ra, có thể bổ sung các chức năng vận hành như quản lý housekeeping chi tiết, phân công dọn phòng, nhắc việc theo ca và lịch bảo trì phòng.
+
+Về mặt kỹ thuật, hệ thống nên được bổ sung bộ kiểm thử tự động cho các blueprint và service quan trọng, kết hợp pipeline CI/CD để giảm rủi ro khi cập nhật. Khi nhu cầu truy cập tăng, có thể tối ưu truy vấn, bổ sung cache, phân quyền chi tiết hơn và cân nhắc tách một số dịch vụ theo hướng API để thuận tiện phát triển các client khác như ứng dụng di động cho quản lý.
+
+%---------------------------------------
+\clearpage
+\chapter*{TÀI LIỆU THAM KHẢO}
+\addcontentsline{toc}{chapter}{TÀI LIỆU THAM KHẢO}
+%---------------------------------------
+
+[1] Miguel Grinberg, \emph{Flask Web Development}. O'Reilly Media, 2018.
+ 
+[2] Pallets Projects, \emph{Flask Documentation}.  
+Truy cập tại: \href{https://flask.palletsprojects.com}{https://flask.palletsprojects.com}.
+ 
+[3] SQLAlchemy, \emph{SQLAlchemy 2.0 Documentation}.  
+Truy cập tại: \href{https://docs.sqlalchemy.org}{https://docs.sqlalchemy.org}.
+ 
+[4] Microsoft, \emph{Playwright for Python Documentation}.  
+Truy cập tại: \href{https://playwright.dev/python/}{https://playwright.dev/python/}.
+ 
+[5] Oracle, \emph{MySQL 8.0 Reference Manual}.  
+Truy cập tại: \href{https://dev.mysql.com/doc}{https://dev.mysql.com/doc}.
+ 
+[6] Tailwind Labs, \emph{Tailwind CSS Documentation}.  
+Truy cập tại: \href{https://tailwindcss.com/docs}{https://tailwindcss.com/docs}.
+ 
+[7] Chart.js, \emph{Chart.js Documentation}.  
+Truy cập tại: \href{https://www.chartjs.org/docs}{https://www.chartjs.org/docs}.
+
+[8] OpenAI, \emph{API Documentation}.  
+Truy cập tại: \href{https://platform.openai.com/docs}{https://platform.openai.com/docs}.
+ 
+
+\end{document}

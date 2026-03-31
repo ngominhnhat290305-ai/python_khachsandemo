@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+{% set is_edit = room is not none %}
+{% block title %}{{ 'Sửa phòng' if is_edit else 'Thêm phòng mới' }}{% endblock %}
+{% block page_title %}{{ 'Sửa phòng ' + room.room_number if is_edit else 'Thêm phòng mới' }}{% endblock %}
+{% block breadcrumb %}
+  <a href="{{ url_for('rooms.index') }}" class="hover:text-sienna">Phòng</a>
+  / {{ 'Chỉnh sửa' if is_edit else 'Thêm mới' }}
+{% endblock %}
+
+{% block content %}
+<form method="POST" enctype="multipart/form-data" class="max-w-3xl">
+  <div class="card">
+    <div class="card-header">
+      <h3 class="font-semibold text-espresso" style="font-family:var(--font-serif)">
+        <i class="fas fa-info-circle text-sienna mr-2"></i>Thông tin phòng
+      </h3>
+    </div>
+    <div class="card-body">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div class="form-group">
+          <label class="form-label">Số phòng <span class="required">*</span></label>
+          <input type="text" name="room_number" class="form-input" required value="{{ room.room_number if is_edit else '' }}">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tầng <span class="required">*</span></label>
+          <input type="number" name="floor" class="form-input" min="1" max="99" required value="{{ room.floor if is_edit else 1 }}">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Hạng phòng <span class="required">*</span></label>
+          <select name="room_type_id" class="form-input" required>
+            <option value="">— Chọn hạng phòng —</option>
+            {% for rt in room_types %}
+            <option value="{{ rt.id }}" {% if is_edit and room.room_type_id == rt.id %}selected{% endif %}>
+              {{ rt.name }} ({{ rt.base_price | currency('') }}/đêm)
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Giá ghi đè (tuỳ chọn)</label>
+          <div class="relative">
+            <input type="text" name="price_override" class="form-input pr-16" inputmode="numeric" autocomplete="off" data-money="vnd"
+                   value="{{ room.price_override|int if is_edit and room.price_override else '' }}">
+            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-mocha">VNĐ</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Loại giường <span class="required">*</span></label>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          {% for code, label, icon in [
+            ('SINGLE','Phòng đơn','fa-bed'),('DOUBLE','Phòng đôi','fa-bed'),
+            ('TWIN','Twin (2 giường)','fa-bed'),('TRIPLE','Triple','fa-bed'),
+            ('SUITE','Suite','fa-star'),('PRESIDENTIAL','Presidential','fa-crown'),
+            ('FAMILY','Gia đình','fa-users'),
+          ] %}
+          <label class="cursor-pointer">
+            <input type="radio" name="bed_type" value="{{ code }}" class="sr-only peer"
+                   {% if (is_edit and room.bed_type == code) or (not is_edit and code == 'DOUBLE') %}checked{% endif %}
+                   required>
+            <div class="border-2 border-parchment rounded-lg p-3 text-center text-sm text-mocha
+                        peer-checked:border-sienna peer-checked:bg-ivory peer-checked:text-espresso
+                        peer-checked:font-semibold hover:border-tan transition-all cursor-pointer">
+              <i class="fas {{ icon }} block mb-1 text-base"></i>
+              {{ label }}
+            </div>
+          </label>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Mô tả</label>
+        <textarea name="description" class="form-input" rows="3">{{ room.description if is_edit else '' }}</textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mt-5">
+    <div class="card-header">
+      <h3 class="font-semibold text-espresso" style="font-family:var(--font-serif)">
+        <i class="fas fa-images text-sienna mr-2"></i>Ảnh phòng
+        <span class="text-xs font-normal text-mocha ml-2">(tối đa 5 ảnh)</span>
+      </h3>
+    </div>
+    <div class="card-body">
+      {% if is_edit and room.image_paths %}
+        <p class="text-sm text-mocha mb-3">Ảnh hiện tại:</p>
+        <div class="room-images-grid mb-5" id="existing-images">
+          {% for img in room.image_paths %}
+            <div class="room-img-slot" data-img="{{ img }}">
+              <img src="{{ url_for('static', filename=img) }}" alt="">
+              <button type="button" onclick="removeExistingImage(this)" class="remove-img" title="Xóa ảnh">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <div id="remove-images-container"></div>
+
+      <label class="block cursor-pointer">
+        <input type="file" name="images" id="room-images" multiple accept="image/*" class="sr-only">
+        <div class="border-2 border-dashed border-tan rounded-xl p-10 text-center hover:border-sienna hover:bg-ivory transition-all">
+          <i class="fas fa-cloud-upload-alt text-3xl text-tan mb-3 block"></i>
+          <p class="text-sm font-medium text-mocha">Kéo thả hoặc click để chọn ảnh</p>
+          <p class="text-xs text-slate mt-1">JPG, PNG, WEBP · Tối đa 5 ảnh</p>
+        </div>
+      </label>
+
+      <div id="preview-grid" class="room-images-grid mt-4" style="display:none"></div>
+    </div>
+  </div>
+
+  <div class="flex items-center gap-3 mt-5">
+    <button type="submit" class="btn btn-primary btn-lg">
+      <i class="fas fa-save"></i> {{ 'Lưu thay đổi' if is_edit else 'Thêm phòng' }}
+    </button>
+    <a href="{{ url_for('rooms.index') }}" class="btn btn-outline btn-lg">
+      <i class="fas fa-times"></i> Huỷ
+    </a>
+  </div>
+</form>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/image-preview.js') }}"></script>
+<script>
+function removeExistingImage(btn) {
+  const slot = btn.closest('.room-img-slot');
+  const img  = slot.getAttribute('data-img');
+  const container = document.getElementById('remove-images-container');
+  const input = document.createElement('input');
+  input.type = 'hidden';
+  input.name = 'remove_images';
+  input.value = img;
+  container.appendChild(input);
+  slot.remove();
+}
+</script>
+{% endblock %}

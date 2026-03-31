@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đăng nhập — Hotel Management</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+</head>
+<body>
+  <div class="login-page">
+    <div class="login-card">
+      <i class="fas fa-hotel brand-icon"></i>
+      <h1 class="brand-title">Hotel MS</h1>
+      <p class="brand-sub">Management System</p>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for cat, msg in messages %}
+          <div class="flex items-center gap-2 p-3 rounded-lg mb-4 text-sm
+            {% if cat == 'error' %}bg-rust/10 border border-rust/30 text-rust
+            {% elif cat == 'success' %}bg-sage/10 border border-sage/30 text-sage
+            {% else %}bg-amber/10 border border-amber/30 text-amber{% endif %}">
+            <i class="fas fa-exclamation-circle flex-shrink-0"></i>
+            <span>{{ msg }}</span>
+          </div>
+        {% endfor %}
+      {% endwith %}
+
+      <form method="POST">
+        <div class="form-group">
+          <label class="form-label">
+            <i class="fas fa-user mr-1 text-tan"></i> Tên đăng nhập
+          </label>
+          <input type="text" name="username" class="form-input" placeholder="Nhập tên đăng nhập..." required autofocus
+                 value="{{ request.form.get('username','') }}">
+        </div>
+
+        <div class="form-group relative">
+          <label class="form-label">
+            <i class="fas fa-lock mr-1 text-tan"></i> Mật khẩu
+          </label>
+          <input type="password" name="password" id="pw-input" class="form-input pr-11" placeholder="Nhập mật khẩu..." required>
+          <button type="button" id="toggle-pw"
+                  class="absolute right-3 top-[38px] text-tan hover:text-sienna transition-colors p-1">
+            <i class="fas fa-eye text-sm"></i>
+          </button>
+        </div>
+
+        <div class="flex items-center justify-between mb-6">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" name="remember" class="rounded border-tan accent-sienna">
+            <span class="text-sm text-mocha">Nhớ tài khoản</span>
+          </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg w-full justify-center">
+          <i class="fas fa-sign-in-alt"></i> Đăng nhập
+        </button>
+      </form>
+
+      <p class="text-center text-xs text-slate mt-6 opacity-70">
+        Hotel Management System v1.0
+      </p>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('toggle-pw').addEventListener('click', function() {
+      const inp = document.getElementById('pw-input');
+      const icon = this.querySelector('i');
+      if (inp.type === 'password') {
+        inp.type = 'text';
+        icon.className = 'fas fa-eye-slash text-sm';
+      } else {
+        inp.type = 'password';
+        icon.className = 'fas fa-eye text-sm';
+      }
+    });
+  </script>
+</body>
+</html>

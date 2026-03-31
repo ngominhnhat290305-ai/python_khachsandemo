@@ -1,0 +1,244 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+{% block breadcrumb %}Tổng quan hệ thống{% endblock %}
+
+{% block topbar_actions %}
+<span class="text-xs px-3 py-1.5 bg-ivory border border-parchment rounded-full text-mocha">
+  <i class="fas fa-circle text-sage text-xs mr-1"></i> Hệ thống hoạt động
+</span>
+{% endblock %}
+
+{% block content %}
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-5 mb-7">
+  <div class="kpi-card">
+    <div class="kpi-icon" style="background:#F5F0E8; color:#8B6F47"><i class="fas fa-bed"></i></div>
+    <div class="kpi-value">{{ total_rooms }}</div>
+    <div class="kpi-label">Tổng số phòng</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-icon" style="background:#EAF0E6; color:#7A8C6E"><i class="fas fa-door-open"></i></div>
+    <div class="kpi-value">{{ available }}</div>
+    <div class="kpi-label">Phòng trống</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-icon" style="background:#FAEAE6; color:#C0533A"><i class="fas fa-user-check"></i></div>
+    <div class="kpi-value">{{ occupied }}</div>
+    <div class="kpi-label">Đang có khách</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-icon" style="background:#F0E6C8; color:#B8860B"><i class="fas fa-coins"></i></div>
+    <div class="kpi-value text-2xl">{{ month_revenue | currency }}</div>
+    <div class="kpi-label">Doanh thu tháng</div>
+  </div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-7">
+  <div class="card lg:col-span-2">
+    <div class="card-header flex items-center justify-between">
+      <div>
+        <h3 class="font-semibold text-espresso" style="font-family:var(--font-serif)">Doanh thu năm {{ now.year }}</h3>
+        <p class="text-xs text-mocha mt-0.5">Theo từng tháng (VNĐ)</p>
+      </div>
+      <span class="text-xs text-mocha bg-ivory px-3 py-1 rounded-full border border-parchment">
+        <i class="fas fa-chart-line mr-1 text-sienna"></i> Biểu đồ
+      </span>
+    </div>
+    <div class="card-body">
+      <canvas id="revenueChart" height="100"></canvas>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header">
+      <h3 class="font-semibold text-espresso" style="font-family:var(--font-serif)">Trạng thái phòng</h3>
+    </div>
+    <div class="card-body flex flex-col items-center">
+      <canvas id="roomStatusChart" height="180"></canvas>
+      <div class="flex flex-wrap gap-3 mt-4 justify-center">
+        {% set statuses = [
+          ('Trống','#7A8C6E'), ('Đã đặt','#B8860B'), ('Đang ở','#C0533A'),
+          ('Dọn phòng','#C9A84C'), ('Bảo trì','#7B8794')
+        ] %}
+        {% for label, color in statuses %}
+        <span class="flex items-center gap-1.5 text-xs text-mocha">
+          <span class="w-2.5 h-2.5 rounded-full inline-block" style="background:{{color}}"></span>
+          {{ label }}
+        </span>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-7">
+  <div class="card">
+    <div class="card-header flex items-center justify-between">
+      <h3 class="font-semibold text-espresso" style="font-family:var(--font-serif)">
+        <i class="fas fa-sign-in-alt text-sage mr-2"></i>Check-in hôm nay
+      </h3>
+      <span class="badge badge-confirmed">{{ checkins_today|length }} booking</span>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="hms-table">
+        <thead><tr><th>Mã booking</th><th>Khách hàng</th><th>Phòng</th><th>Thao tác</th></tr></thead>
+        <tbody>
+          {% for b in checkins_today[:8] %}
+          <tr>
+            <td><span class="font-mono text-xs text-sienna">{{ b.booking_code }}</span></td>
+            <td>
+              <div class="font-medium text-sm">{{ b.customer.full_name }}</div>
+              <div class="text-xs text-mocha">{{ b.customer.phone }}</div>
+            </td>
+            <td>
+              <span class="font-semibold">{{ b.room.room_number }}</span>
+              <span class="text-xs text-mocha ml-1">{{ b.room.room_type.name }}</span>
+            </td>
+            <td>
+              <button onclick="doCheckIn({{ b.id }}, '{{ b.booking_code }}')" class="btn btn-success btn-sm">
+                <i class="fas fa-check"></i> Check-in
+              </button>
+            </td>
+          </tr>
+          {% else %}
+          <tr><td colspan="4" class="text-center text-mocha py-8">Không có check-in hôm nay</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header flex items-center justify-between">
+      <h3 class="font-semibold text-espresso" style="font-family:var(--font-serif)">
+        <i class="fas fa-sign-out-alt text-rust mr-2"></i>Check-out hôm nay
+      </h3>
+      <span class="badge badge-occupied">{{ checkouts_today|length }} booking</span>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="hms-table">
+        <thead><tr><th>Mã booking</th><th>Khách hàng</th><th>Phòng</th><th>Thao tác</th></tr></thead>
+        <tbody>
+          {% for b in checkouts_today[:8] %}
+          <tr>
+            <td><span class="font-mono text-xs text-sienna">{{ b.booking_code }}</span></td>
+            <td>
+              <div class="font-medium text-sm">{{ b.customer.full_name }}</div>
+              <div class="text-xs text-mocha">{{ b.customer.phone }}</div>
+            </td>
+            <td>
+              <span class="font-semibold">{{ b.room.room_number }}</span>
+              <span class="text-xs text-mocha ml-1">Tầng {{ b.room.floor }}</span>
+            </td>
+            <td>
+              <button onclick="doCheckOut({{ b.id }}, '{{ b.booking_code }}')" class="btn btn-danger btn-sm">
+                <i class="fas fa-door-open"></i> Check-out
+              </button>
+            </td>
+          </tr>
+          {% else %}
+          <tr><td colspan="4" class="text-center text-mocha py-8">Không có check-out hôm nay</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header flex items-center justify-between">
+    <h3 class="font-semibold text-espresso" style="font-family:var(--font-serif)">
+      <i class="fas fa-clock text-sienna mr-2"></i>Đặt phòng gần đây
+    </h3>
+    <a href="{{ url_for('bookings.index') }}" class="btn btn-outline btn-sm">Xem tất cả <i class="fas fa-arrow-right ml-1"></i></a>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="hms-table">
+      <thead><tr><th>Mã đặt phòng</th><th>Khách hàng</th><th>Phòng</th><th>Nhận phòng</th><th>Trả phòng</th><th>Trạng thái</th></tr></thead>
+      <tbody>
+        {% for b in recent_bookings %}
+        <tr onclick="window.location='{{ url_for('bookings.detail', id=b.id) }}'" class="cursor-pointer">
+          <td><span class="font-mono text-xs font-semibold text-sienna">{{ b.booking_code }}</span></td>
+          <td>
+            <div class="flex items-center gap-2">
+              <img src="{{ url_for('static', filename=b.customer.avatar_path or 'images/default/avatar.png') }}"
+                   class="w-8 h-8 rounded-full object-cover border border-parchment"
+                   onerror="this.src='{{ url_for('static', filename='images/default/avatar.png') }}'">
+              <div>
+                <div class="text-sm font-medium">{{ b.customer.full_name }}</div>
+                <div class="text-xs text-mocha">{{ b.customer.phone }}</div>
+              </div>
+            </div>
+          </td>
+          <td>
+            <span class="font-semibold">{{ b.room.room_number }}</span>
+            <span class="text-xs text-mocha block">{{ b.room.room_type.name }}</span>
+          </td>
+          <td class="text-sm">{{ b.check_in_date | fdate }}</td>
+          <td class="text-sm">{{ b.check_out_date | fdate }}</td>
+          <td>
+            <span class="badge badge-{{ b.status.lower().replace('_','-') }}">
+              {{ {'PENDING':'Chờ XN','CONFIRMED':'Đã XN','CHECKED_IN':'Đang ở','CHECKED_OUT':'Đã trả','CANCELLED':'Đã huỷ'}[b.status] }}
+            </span>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const ctx1 = document.getElementById('revenueChart').getContext('2d');
+new Chart(ctx1, {
+  type: 'line',
+  data: { labels: {{ chart_labels | tojson }}, datasets: [{
+    data: {{ chart_data | tojson }},
+    borderColor: '#8B6F47',
+    backgroundColor: 'rgba(139,111,71,.08)',
+    borderWidth: 2.5,
+    pointBackgroundColor: '#8B6F47',
+    pointRadius: 5,
+    pointHoverRadius: 7,
+    tension: 0.35,
+    fill: true,
+  }]},
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { beginAtZero: true, grid: { color: '#EDE8DF' }, ticks: { color: '#7D6355', font: { size: 11 },
+        callback: v => v >= 1e6 ? (v/1e6).toFixed(1)+'M' : v >= 1e3 ? (v/1e3)+'K' : v } },
+      x: { grid: { display: false }, ticks: { color: '#7D6355', font: { size: 11 } } }
+    }
+  }
+});
+const ctx2 = document.getElementById('roomStatusChart').getContext('2d');
+new Chart(ctx2, {
+  type: 'doughnut',
+  data: { labels: ['Trống','Đã đặt','Đang ở','Dọn phòng','Bảo trì'], datasets: [{
+    data: [{{ available }}, {{ total_rooms - available - occupied - maintenance }}, {{ occupied }}, 0, {{ maintenance }}],
+    backgroundColor: ['#7A8C6E','#B8860B','#C0533A','#C9A84C','#7B8794'],
+    borderWidth: 0,
+    hoverOffset: 6
+  }]},
+  options: { responsive: true, cutout: '68%', plugins: { legend: { display: false } } }
+});
+async function doCheckIn(id, code) {
+  openConfirm('Xác nhận Check-in', `Check-in booking ${code}?`, async () => {
+    const res = await fetch(`/bookings/${id}/checkin`, { method: 'POST' });
+    const data = await res.json();
+    showToast(data.message, data.success ? 'success' : 'error');
+    if (data.success) setTimeout(() => location.reload(), 900);
+  });
+}
+async function doCheckOut(id, code) {
+  openConfirm('Xác nhận Check-out', `Check-out booking ${code} và tạo hóa đơn?`, async () => {
+    const res = await fetch(`/bookings/${id}/checkout`, { method: 'POST' });
+    const data = await res.json();
+    showToast(data.message, data.success ? 'success' : 'error');
+    if (data.success && data.redirect) setTimeout(() => window.location.href = data.redirect, 900);
+  });
+}
+</script>
+{% endblock %}

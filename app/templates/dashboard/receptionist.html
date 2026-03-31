@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+{% block breadcrumb %}Tóm tắt hôm nay{% endblock %}
+
+{% block content %}
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-7">
+  <div class="kpi-card">
+    <div class="kpi-icon" style="background:#EAF0E6; color:#7A8C6E"><i class="fas fa-door-open"></i></div>
+    <div class="kpi-value">{{ available }}</div>
+    <div class="kpi-label">Phòng trống</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-icon" style="background:#F5F0E8; color:#8B6F47"><i class="fas fa-calendar-check"></i></div>
+    <div class="kpi-value">{{ checkins_today|length }}</div>
+    <div class="kpi-label">Check-in hôm nay</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-icon" style="background:#FAEAE6; color:#C0533A"><i class="fas fa-door-open"></i></div>
+    <div class="kpi-value">{{ checkouts_today|length }}</div>
+    <div class="kpi-label">Check-out hôm nay</div>
+  </div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+  <div class="card">
+    <div class="card-header flex items-center justify-between">
+      <h3 class="font-semibold text-espresso" style="font-family:var(--font-serif)">Check-in cần xử lý</h3>
+      <a href="{{ url_for('bookings.create') }}" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Tạo booking</a>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="hms-table">
+        <thead><tr><th>Mã</th><th>Khách</th><th>Phòng</th><th></th></tr></thead>
+        <tbody>
+          {% for b in checkins_today[:10] %}
+          <tr>
+            <td class="text-xs font-mono text-sienna">{{ b.booking_code }}</td>
+            <td>{{ b.customer.full_name }}</td>
+            <td class="font-semibold">{{ b.room.room_number }}</td>
+            <td>
+              <button onclick="doCheckIn({{ b.id }}, '{{ b.booking_code }}')" class="btn btn-success btn-sm">
+                <i class="fas fa-check"></i>
+              </button>
+            </td>
+          </tr>
+          {% else %}
+          <tr><td colspan="4" class="text-center py-8 text-mocha">Không có</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3 class="font-semibold text-espresso" style="font-family:var(--font-serif)">Check-out hôm nay</h3>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="hms-table">
+        <thead><tr><th>Mã</th><th>Khách</th><th>Phòng</th><th></th></tr></thead>
+        <tbody>
+          {% for b in checkouts_today[:10] %}
+          <tr>
+            <td class="text-xs font-mono text-sienna">{{ b.booking_code }}</td>
+            <td>{{ b.customer.full_name }}</td>
+            <td class="font-semibold">{{ b.room.room_number }}</td>
+            <td>
+              <button onclick="doCheckOut({{ b.id }}, '{{ b.booking_code }}')" class="btn btn-danger btn-sm">
+                <i class="fas fa-door-open"></i>
+              </button>
+            </td>
+          </tr>
+          {% else %}
+          <tr><td colspan="4" class="text-center py-8 text-mocha">Không có</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+async function doCheckIn(id, code) {
+  openConfirm('Xác nhận Check-in', `Check-in booking ${code}?`, async () => {
+    const res = await fetch(`/bookings/${id}/checkin`, { method: 'POST' });
+    const data = await res.json();
+    showToast(data.message, data.success ? 'success' : 'error');
+    if (data.success) setTimeout(() => location.reload(), 900);
+  });
+}
+async function doCheckOut(id, code) {
+  openConfirm('Xác nhận Check-out', `Check-out booking ${code} và tạo hóa đơn?`, async () => {
+    const res = await fetch(`/bookings/${id}/checkout`, { method: 'POST' });
+    const data = await res.json();
+    showToast(data.message, data.success ? 'success' : 'error');
+    if (data.success && data.redirect) setTimeout(() => window.location.href = data.redirect, 900);
+  });
+}
+</script>
+{% endblock %}

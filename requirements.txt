@@ -1,0 +1,12 @@
+Flas
+Flask-SQLAlchemy
+Flask-Login
+Flask-Bcrypt
+Flask-Migrate
+mysql-connector-python
+Pillow
+python-dotenv
+requests
+openpyxl
+Markdown
+

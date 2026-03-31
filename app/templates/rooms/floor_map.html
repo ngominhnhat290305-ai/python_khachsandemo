@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Sơ đồ tầng{% endblock %}
+{% block page_title %}Sơ đồ tầng{% endblock %}
+{% block breadcrumb %}
+  <a href="{{ url_for('rooms.index') }}" class="hover:text-sienna">Phòng</a> / Sơ đồ tầng
+{% endblock %}
+
+{% block content %}
+<div class="space-y-8">
+  {% for floor, rooms in floors.items() %}
+    <div class="card">
+      <div class="card-header flex items-center justify-between">
+        <h3 class="font-semibold text-espresso" style="font-family:var(--font-serif)">Tầng {{ floor }}</h3>
+        <span class="text-xs text-mocha bg-ivory px-3 py-1 rounded-full border border-parchment">{{ rooms|length }} phòng</span>
+      </div>
+      <div class="card-body">
+        <div class="floor-map-grid">
+          {% for room in rooms %}
+            <div class="room-tile {{ room.status.lower() }}" onclick="window.location='{{ url_for('rooms.edit', id=room.id) if current_user.is_admin else url_for('rooms.index') }}'">
+              <div class="room-num">{{ room.room_number }}</div>
+              <div class="room-type-badge">{{ room.room_type.name }}</div>
+              <div class="room-status-dot"></div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}

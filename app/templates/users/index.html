@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% block title %}Nhân viên{% endblock %}
+{% block page_title %}Nhân viên{% endblock %}
+{% block breadcrumb %}Quản lý tài khoản nhân viên{% endblock %}
+
+{% block topbar_actions %}
+<a href="{{ url_for('users.create') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Thêm nhân viên</a>
+{% endblock %}
+
+{% block content %}
+<div class="card mb-5">
+  <div class="card-body py-4">
+    <form method="GET" class="flex flex-wrap gap-3 items-end">
+      <div class="flex-1 min-w-56">
+        <label class="form-label">Tìm kiếm</label>
+        <div class="search-bar">
+          <i class="fas fa-search"></i>
+          <input type="text" name="q" placeholder="username / họ tên..." value="{{ request.args.get('q','') }}">
+        </div>
+      </div>
+      <div>
+        <label class="form-label">&nbsp;</label>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-filter"></i> Lọc</button>
+        <a href="{{ url_for('users.index') }}" class="btn btn-outline ml-2"><i class="fas fa-times"></i></a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="table-wrapper">
+  <table class="hms-table">
+    <thead><tr><th>Nhân viên</th><th>Role</th><th>Liên hệ</th><th>Trạng thái</th><th class="text-center">Thao tác</th></tr></thead>
+    <tbody>
+      {% for u in users.items %}
+      <tr id="user-row-{{ u.id }}">
+        <td>
+          <div class="flex items-center gap-3">
+            <img src="{{ url_for('static', filename=u.avatar_path or 'images/default/avatar.png') }}"
+                 class="w-10 h-10 rounded-full object-cover border border-parchment"
+                 onerror="this.src='{{ url_for('static', filename='images/default/avatar.png') }}'">
+            <div>
+              <div class="font-semibold text-espresso">{{ u.full_name }}</div>
+              <div class="text-xs text-mocha font-mono">{{ u.username }}</div>
+            </div>
+          </div>
+        </td>
+        <td>
+          <span class="badge badge-{{ 'paid' if u.role=='ADMIN' else 'confirmed' }}">{{ u.role_display }}</span>
+        </td>
+        <td class="text-sm text-mocha">
+          <div>{{ u.phone or '—' }}</div>
+          <div>{{ u.email or '—' }}</div>
+        </td>
+        <td>
+          {% if u.is_active %}
+            <span class="badge badge-paid">Hoạt động</span>
+          {% else %}
+            <span class="badge badge-unpaid">Bị khóa</span>
+          {% endif %}
+        </td>
+        <td>
+          <div class="flex items-center gap-1.5 justify-center">
+            <a href="{{ url_for('users.edit', id=u.id) }}" class="btn btn-outline btn-icon btn-sm" title="Sửa">
+              <i class="fas fa-edit text-xs"></i>
+            </a>
+            <button class="btn btn-gold btn-icon btn-sm" title="Reset mật khẩu"
+                    onclick="openConfirm('Reset mật khẩu', 'Reset mật khẩu cho {{ u.username }}? Mật khẩu mới sẽ hiển thị sau khi reset.', async () => { await ajaxPostJson('{{ url_for('users.reset_password', id=u.id) }}'); })">
+              <i class="fas fa-key text-xs"></i>
+            </button>
+            <button class="btn btn-outline btn-icon btn-sm" title="Khóa/Mở"
+                    onclick="openConfirm('Khóa/Mở tài khoản', 'Đổi trạng thái hoạt động cho {{ u.username }}?', async () => { const r = await ajaxPostJson('{{ url_for('users.toggle_active', id=u.id) }}'); if (r?.success) setTimeout(()=>location.reload(), 700); })">
+              <i class="fas fa-toggle-on text-xs"></i>
+            </button>
+            <button class="btn btn-danger btn-icon btn-sm" title="Xóa"
+                    onclick="ajaxDelete('{{ url_for('users.delete', id=u.id) }}', '#user-row-{{ u.id }}', 'Xóa nhân viên {{ u.username }}?')">
+              <i class="fas fa-trash text-xs"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="5" class="text-center py-12 text-mocha">Chưa có nhân viên</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {% if users.pages > 1 %}
+  <div class="pagination">
+    <span class="text-xs text-mocha mr-3">{{ users.total }} kết quả — Trang {{ users.page }}/{{ users.pages }}</span>
+    {% if users.has_prev %}
+      <a href="{{ url_for('users.index', page=users.prev_num, q=request.args.get('q','')) }}" class="page-btn"><i class="fas fa-chevron-left text-xs"></i></a>
+    {% endif %}
+    {% for p in users.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+      {% if p %}
+        <a href="{{ url_for('users.index', page=p, q=request.args.get('q','')) }}" class="page-btn {% if p == users.page %}active{% endif %}">{{ p }}</a>
+      {% else %}
+        <span class="page-btn disabled">…</span>
+      {% endif %}
+    {% endfor %}
+    {% if users.has_next %}
+      <a href="{{ url_for('users.index', page=users.next_num, q=request.args.get('q','')) }}" class="page-btn"><i class="fas fa-chevron-right text-xs"></i></a>
+    {% endif %}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% set is_edit = customer is not none %}
+{% block title %}{{ 'Sửa khách hàng' if is_edit else 'Thêm khách hàng' }}{% endblock %}
+{% block page_title %}{{ 'Sửa khách hàng' if is_edit else 'Thêm khách hàng' }}{% endblock %}
+{% block breadcrumb %}
+  <a href="{{ url_for('customers.index') }}" class="hover:text-sienna">Khách hàng</a> / {{ 'Chỉnh sửa' if is_edit else 'Thêm mới' }}
+{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl">
+  <form method="POST" enctype="multipart/form-data" class="card">
+    <div class="card-header">
+      <h3 class="font-semibold text-espresso" style="font-family:var(--font-serif)">
+        <i class="fas fa-user-tie text-sienna mr-2"></i>{{ 'Cập nhật khách hàng' if is_edit else 'Thêm khách hàng mới' }}
+      </h3>
+    </div>
+    <div class="card-body">
+      <div class="flex items-center gap-5 mb-6">
+        <div class="avatar-upload-zone" onclick="document.getElementById('avatar-input').click()">
+          <img id="avatar-preview"
+               src="{{ url_for('static', filename=(customer.avatar_path if is_edit else 'images/default/avatar.png')) }}"
+               alt="avatar"
+               onerror="this.src='{{ url_for('static', filename='images/default/avatar.png') }}'">
+          <div class="upload-overlay"><i class="fas fa-camera text-white"></i></div>
+        </div>
+        <div class="flex-1">
+          <label class="form-label">Avatar</label>
+          <input type="file" name="avatar" id="avatar-input" accept="image/*" class="form-input">
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div class="form-group md:col-span-2">
+          <label class="form-label">Họ tên <span class="required">*</span></label>
+          <input type="text" name="full_name" class="form-input" required value="{{ customer.full_name if is_edit else '' }}">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Loại giấy tờ</label>
+          <select name="id_type" class="form-input">
+            {% for code in ['CCCD','PASSPORT','DRIVER_LICENSE'] %}
+            <option value="{{ code }}" {% if is_edit and customer.id_type==code %}selected{% endif %}>{{ code }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Số giấy tờ <span class="required">*</span></label>
+          <input type="text" name="id_number" class="form-input" required value="{{ customer.id_number if is_edit else '' }}">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Giới tính</label>
+          <select name="gender" class="form-input">
+            {% for code, label in [('MALE','Nam'),('FEMALE','Nữ'),('OTHER','Khác')] %}
+            <option value="{{ code }}" {% if is_edit and customer.gender==code %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Ngày sinh</label>
+          <input type="date" name="date_of_birth" class="form-input" value="{{ customer.date_of_birth.isoformat() if is_edit and customer.date_of_birth else '' }}">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Số điện thoại</label>
+          <input type="text" name="phone" class="form-input" value="{{ customer.phone if is_edit and customer.phone else '' }}">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input type="email" name="email" class="form-input" value="{{ customer.email if is_edit and customer.email else '' }}">
+        </div>
+        <div class="form-group md:col-span-2">
+          <label class="form-label">Quốc tịch</label>
+          <input type="text" name="nationality" class="form-input" value="{{ customer.nationality if is_edit and customer.nationality else 'Việt Nam' }}">
+        </div>
+        <div class="form-group md:col-span-2">
+          <label class="form-label">Địa chỉ</label>
+          <textarea name="address" class="form-input" rows="2">{{ customer.address if is_edit and customer.address else '' }}</textarea>
+        </div>
+        <div class="form-group md:col-span-2">
+          <label class="form-label">Ghi chú</label>
+          <textarea name="notes" class="form-input" rows="2">{{ customer.notes if is_edit and customer.notes else '' }}</textarea>
+        </div>
+      </div>
+
+      <div class="flex gap-3 mt-2">
+        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Lưu</button>
+        <a href="{{ url_for('customers.index') }}" class="btn btn-outline"><i class="fas fa-times"></i> Huỷ</a>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/image-preview.js') }}"></script>
+{% endblock %}

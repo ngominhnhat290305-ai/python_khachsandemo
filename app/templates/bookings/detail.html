@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+{% block title %}Booking {{ booking.booking_code }}{% endblock %}
+{% block page_title %}Booking{% endblock %}
+{% block breadcrumb %}
+  <a href="{{ url_for('bookings.index') }}" class="hover:text-sienna">Đặt phòng</a> / {{ booking.booking_code }}
+{% endblock %}
+
+{% block topbar_actions %}
+{% if booking.status == 'PENDING' and current_user.is_admin %}
+<button class="btn btn-success" onclick="doConfirm()"><i class="fas fa-check"></i> Xác nhận</button>
+{% endif %}
+{% if booking.status == 'CONFIRMED' %}
+<button class="btn btn-success" onclick="doCheckIn()"><i class="fas fa-sign-in-alt"></i> Check-in</button>
+{% endif %}
+{% if booking.status == 'CHECKED_IN' %}
+<button class="btn btn-danger" onclick="doCheckOut()"><i class="fas fa-door-open"></i> Check-out</button>
+{% endif %}
+{% if booking.status in ['PENDING','CONFIRMED'] %}
+<button class="btn btn-outline" onclick="doCancel()"><i class="fas fa-ban"></i> Huỷ</button>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+  <div class="card lg:col-span-2">
+    <div class="card-header flex items-center justify-between">
+      <h3 class="font-semibold text-espresso" style="font-family:var(--font-serif)">
+        <i class="fas fa-info-circle text-sienna mr-2"></i>Chi tiết booking
+      </h3>
+      <span class="badge badge-{{ booking.status.lower().replace('_','-') }}">{{ booking.status | booking_status_vi }}</span>
+    </div>
+    <div class="card-body">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-sm text-mocha">
+        <div>
+          <div class="text-xs uppercase tracking-widest text-tan mb-1">Khách hàng</div>
+          <div class="font-semibold text-espresso">{{ booking.customer.full_name }}</div>
+          <div>{{ booking.customer.phone or '—' }}</div>
+          <div>{{ booking.customer.id_type }}: {{ booking.customer.id_number }}</div>
+        </div>
+        <div>
+          <div class="text-xs uppercase tracking-widest text-tan mb-1">Phòng</div>
+          <div class="font-semibold text-espresso">Phòng {{ booking.room.room_number }} · Tầng {{ booking.room.floor }}</div>
+          <div>{{ booking.room.room_type.name }}</div>
+          <div>{{ booking.room.effective_price | currency }} / đêm</div>
+        </div>
+        <div>
+          <div class="text-xs uppercase tracking-widest text-tan mb-1">Ngày</div>
+          <div>Nhận: <span class="font-semibold text-espresso">{{ booking.check_in_date | fdate }}</span></div>
+          <div>Trả: <span class="font-semibold text-espresso">{{ booking.check_out_date | fdate }}</span></div>
+          <div>Số đêm: <span class="font-semibold text-espresso">{{ booking.num_nights }}</span></div>
+        </div>
+        <div>
+          <div class="text-xs uppercase tracking-widest text-tan mb-1">Khác</div>
+          <div>Người lớn: {{ booking.num_adults }}</div>
+          <div>Trẻ em: {{ booking.num_children }}</div>
+          <div>Tiền cọc: <span class="font-semibold text-espresso">{{ booking.deposit_amount | currency }}</span></div>
+        </div>
+      </div>
+      {% if booking.special_requests %}
+      <div class="mt-5 p-3 bg-ivory border border-parchment rounded-lg text-sm text-mocha">{{ booking.special_requests }}</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3 class="font-semibold text-espresso" style="font-family:var(--font-serif)">
+        <i class="fas fa-concierge-bell text-sienna mr-2"></i>Dịch vụ
+      </h3>
+    </div>
+    <div class="card-body">
+      {% if booking.status == 'CHECKED_IN' %}
+      <form method="POST" action="{{ url_for('bookings.add_service', id=booking.id) }}" class="mb-4">
+        <div class="form-group">
+          <label class="form-label">Chọn dịch vụ</label>
+          <select name="service_id" class="form-input" required>
+            {% for s in services %}
+            <option value="{{ s.id }}">{{ s.name }} · {{ s.unit_price | currency }} / {{ s.unit }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Số lượng</label>
+          <input type="number" name="quantity" class="form-input" min="1" value="1">
+        </div>
+        <button type="submit" class="btn btn-primary w-full justify-center"><i class="fas fa-plus"></i> Thêm</button>
+      </form>
+      {% else %}
+      <div class="text-sm text-mocha mb-4">Chỉ thêm dịch vụ khi CHECKED_IN.</div>
+      {% endif %}
+
+      <div class="space-y-2">
+        {% for bs in booking.booking_services %}
+        <div class="flex items-start justify-between gap-3 p-3 bg-ivory border border-parchment rounded-lg">
+          <div>
+            <div class="font-semibold text-espresso text-sm">{{ bs.service.name }}</div>
+            <div class="text-xs text-mocha">{{ bs.quantity }} {{ bs.service.unit }} · {{ bs.total_price | currency }}</div>
+          </div>
+          {% if booking.status == 'CHECKED_IN' %}
+          <form method="POST" action="{{ url_for('bookings.remove_service', id=booking.id, bs_id=bs.id) }}">
+            <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-times"></i></button>
+          </form>
+          {% endif %}
+        </div>
+        {% else %}
+        <div class="text-sm text-mocha">Chưa có dịch vụ.</div>
+        {% endfor %}
+      </div>
+
+      {% if booking.invoice %}
+      <div class="mt-5">
+        <a href="{{ url_for('invoices.detail', id=booking.invoice.id) }}" class="btn btn-outline w-full justify-center">
+          <i class="fas fa-file-invoice"></i> Xem hóa đơn
+        </a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+async function doConfirm() {
+  openConfirm('Xác nhận booking', 'Xác nhận booking này?', async () => {
+    const res = await fetch('{{ url_for("bookings.confirm", id=booking.id) }}', { method: 'POST' });
+    const data = await res.json();
+    showToast(data.message, data.success ? 'success' : 'error');
+    if (data.success) setTimeout(()=>location.reload(), 800);
+  });
+}
+async function doCheckIn() {
+  openConfirm('Check-in', 'Thực hiện check-in?', async () => {
+    const res = await fetch('{{ url_for("bookings.checkin", id=booking.id) }}', { method: 'POST' });
+    const data = await res.json();
+    showToast(data.message, data.success ? 'success' : 'error');
+    if (data.success) setTimeout(()=>location.reload(), 800);
+  });
+}
+async function doCheckOut() {
+  openConfirm('Check-out', 'Check-out và tạo hóa đơn?', async () => {
+    const res = await fetch('{{ url_for("bookings.checkout", id=booking.id) }}', { method: 'POST' });
+    const data = await res.json();
+    showToast(data.message, data.success ? 'success' : 'error');
+    if (data.success && data.redirect) setTimeout(()=>window.location.href=data.redirect, 800);
+  });
+}
+async function doCancel() {
+  openConfirm('Huỷ booking', 'Huỷ booking này?', async () => {
+    const res = await fetch('{{ url_for("bookings.cancel", id=booking.id) }}', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ reason: '' }),
+    });
+    const data = await res.json();
+    showToast(data.message, data.success ? 'success' : 'error');
+    if (data.success) setTimeout(()=>location.reload(), 800);
+  });
+}
+</script>
+{% endblock %}

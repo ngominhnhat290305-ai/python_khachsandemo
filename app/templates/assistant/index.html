@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+{% block title %}Trợ lý{% endblock %}
+{% block page_title %}Trợ lý{% endblock %}
+{% block breadcrumb %}Chatbot hỗ trợ nội bộ{% endblock %}
+
+{% block topbar_actions %}
+<button class="btn btn-outline" id="reset-chat"><i class="fas fa-rotate-left"></i> Xoá hội thoại</button>
+{% endblock %}
+
+{% block content %}
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+  <div class="card lg:col-span-2">
+    <div class="card-header flex items-center justify-between">
+      <h3 class="font-semibold text-espresso" style="font-family:var(--font-serif)">
+        <i class="fas fa-robot text-sienna mr-2"></i>Chatbot HMS
+      </h3>
+      <span class="text-xs text-mocha bg-ivory px-3 py-1 rounded-full border border-parchment">
+        {{ current_user.role_display }}
+      </span>
+    </div>
+    <div class="card-body">
+      <div id="chat-window" class="space-y-3" style="min-height: 360px; max-height: 520px; overflow:auto;">
+        <div class="p-4 bg-ivory border border-parchment rounded-xl">
+          <div class="text-sm text-mocha">
+            Bạn hỏi bất kỳ nghiệp vụ nào (booking, phòng, hóa đơn, báo cáo) hoặc cách thao tác trên hệ thống.
+          </div>
+        </div>
+      </div>
+
+      <form id="chat-form" class="mt-5 flex gap-3 items-start">
+        <textarea id="chat-input" class="form-input flex-1" rows="2" placeholder="Nhập câu hỏi... (Enter để gửi, Shift+Enter xuống dòng)"></textarea>
+        <button type="submit" class="btn btn-primary">
+          <i class="fas fa-paper-plane"></i> Gửi
+        </button>
+      </form>
+      <div class="text-xs text-slate mt-2">
+        Trả lời dùng Markdown và được render HTML.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3 class="font-semibold text-espresso" style="font-family:var(--font-serif)">
+        Gợi ý
+      </h3>
+    </div>
+    <div class="card-body">
+      <div class="space-y-3 text-sm text-mocha">
+        <button class="btn btn-outline w-full justify-center" type="button" onclick="fillPrompt('Tôi muốn tạo booking mới, quy trình chuẩn là gì?')">
+          Tạo booking
+        </button>
+        <button class="btn btn-outline w-full justify-center" type="button" onclick="fillPrompt('Làm sao để check-in và check-out đúng quy trình?')">
+          Check-in / Check-out
+        </button>
+        <button class="btn btn-outline w-full justify-center" type="button" onclick="fillPrompt('Giải thích trạng thái phòng và khi nào đổi trạng thái?')">
+          Trạng thái phòng
+        </button>
+        <button class="btn btn-outline w-full justify-center" type="button" onclick="fillPrompt('Phòng nào đắt nhất top 5?')">
+          Phòng đắt nhất
+        </button>
+        <button class="btn btn-outline w-full justify-center" type="button" onclick="fillPrompt('Hóa đơn cao nhất là cái nào?')">
+          Hóa đơn cao nhất
+        </button>
+        <button class="btn btn-outline w-full justify-center" type="button" onclick="fillPrompt('Doanh thu tháng này bao nhiêu?')">
+          Doanh thu tháng này
+        </button>
+        <button class="btn btn-outline w-full justify-center" type="button" onclick="fillPrompt('Top 5 dịch vụ hay dùng nhất')">
+          Dịch vụ phổ biến
+        </button>
+        <button class="btn btn-outline w-full justify-center" type="button" onclick="fillPrompt('Top 5 khách chi tiêu cao nhất')">
+          Top khách chi tiêu
+        </button>
+        <button class="btn btn-outline w-full justify-center" type="button" onclick="fillPrompt('2tr5 + 300k - 50k = ?')">
+          Tính tiền nhanh
+        </button>
+        <button class="btn btn-outline w-full justify-center" type="button" onclick="fillPrompt('Hóa đơn tính như thế nào? Có VAT và tiền cọc ra sao?')">
+          Tính hóa đơn
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const chatWindow = document.getElementById('chat-window');
+const chatForm = document.getElementById('chat-form');
+const chatInput = document.getElementById('chat-input');
+const resetBtn = document.getElementById('reset-chat');
+
+function esc(s) {
+  return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function appendUser(text) {
+  const wrap = document.createElement('div');
+  wrap.className = 'p-4 bg-white border border-parchment rounded-xl';
+  wrap.innerHTML = `<div class="text-xs text-mocha mb-1"><i class="fas fa-user mr-1 text-tan"></i>Bạn</div>
+                    <div class="text-sm text-espresso whitespace-pre-wrap">${esc(text)}</div>`;
+  chatWindow.appendChild(wrap);
+  chatWindow.scrollTop = chatWindow.scrollHeight;
+}
+
+function appendAssistant(html) {
+  const wrap = document.createElement('div');
+  wrap.className = 'p-4 bg-ivory border border-parchment rounded-xl';
+  wrap.innerHTML = `<div class="text-xs text-mocha mb-1"><i class="fas fa-robot mr-1 text-sienna"></i>Trợ lý</div>
+                    <div class="prose prose-sm max-w-none">${html}</div>`;
+  chatWindow.appendChild(wrap);
+  chatWindow.scrollTop = chatWindow.scrollHeight;
+}
+
+function appendLoading() {
+  const wrap = document.createElement('div');
+  wrap.className = 'p-4 bg-ivory border border-parchment rounded-xl opacity-80';
+  wrap.id = 'assistant-loading';
+  wrap.innerHTML = `<div class="text-xs text-mocha mb-1"><i class="fas fa-robot mr-1 text-sienna"></i>Trợ lý</div>
+                    <div class="text-sm text-mocha">Đang soạn câu trả lời...</div>`;
+  chatWindow.appendChild(wrap);
+  chatWindow.scrollTop = chatWindow.scrollHeight;
+}
+
+function removeLoading() {
+  document.getElementById('assistant-loading')?.remove();
+}
+
+async function sendMessage(text) {
+  appendUser(text);
+  appendLoading();
+  try {
+    const res = await fetch('{{ url_for("assistant.api") }}', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: text }),
+    });
+    const data = await res.json();
+    removeLoading();
+    if (!data.success) {
+      appendAssistant(`<p><strong>Lỗi:</strong> ${esc(data.message || 'Không xác định')}</p>`);
+      return;
+    }
+    appendAssistant(data.html || '<p>(trống)</p>');
+  } catch (e) {
+    removeLoading();
+    appendAssistant('<p><strong>Lỗi:</strong> Không gọi được API.</p>');
+  }
+}
+
+chatForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const text = (chatInput.value || '').trim();
+  if (!text) return;
+  chatInput.value = '';
+  sendMessage(text);
+});
+
+chatInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    chatForm.requestSubmit();
+  }
+});
+
+resetBtn.addEventListener('click', async () => {
+  await fetch('{{ url_for("assistant.reset") }}', { method: 'POST' });
+  chatWindow.innerHTML = `
+    <div class="p-4 bg-ivory border border-parchment rounded-xl">
+      <div class="text-sm text-mocha">Bạn hỏi bất kỳ nghiệp vụ nào (booking, phòng, hóa đơn, báo cáo) hoặc cách thao tác trên hệ thống.</div>
+    </div>
+  `;
+  showToast('Đã xoá hội thoại', 'success');
+});
+
+window.fillPrompt = (t) => { chatInput.value = t; chatInput.focus(); };
+</script>
+{% endblock %}
