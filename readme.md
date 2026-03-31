@@ -246,9 +246,9 @@ Truy cập: **http://localhost:5000**
 
 | Vai trò | Username | Password | Mô tả |
 |---|---|---|---|
-| 🔑 Admin | `admin` | `admin123` | Toàn quyền quản trị |
-| 👤 Lễ tân | `letan1` | `letan123` | Quyền lễ tân |
-| 👤 Lễ tân | `letan2` | `letan123` | Quyền lễ tân |
+| 🔑 Admin | `admin` | `admin@123` | Toàn quyền quản trị |
+| 👤 Lễ tân | `letan1` | `letan@123` | Quyền lễ tân |
+| 👤 Lễ tân | `letan2` | `letan@123` | Quyền lễ tân |
 
 > ⚠️ **Lưu ý:** Hãy đổi mật khẩu mặc định ngay sau khi đăng nhập lần đầu!
 
