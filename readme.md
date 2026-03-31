@@ -1,596 +1,124 @@
-<h1 align="center">🏨 Hotel Management System (HMS)</h1>
 
-<h3 align="center">Hệ Thống Quản Lý Khách Sạn Toàn Diện</h3>
+# \<p align="center"\>🏨 Hotel Management System (HMS)\</p\>
 
+\<p align="center"\>\<b\>Hệ Thống Quản Lý Khách Sạn Toàn Diện Tích Hợp AI\</b\>\</p\>
 
+\<p align="center"\>
+\<img src="[https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge\&logo=python\&logoColor=white](https://www.google.com/search?q=https://img.shields.io/badge/Python-3.11%2B-3776AB%3Fstyle%3Dfor-the-badge%26logo%3Dpython%26logoColor%3Dwhite)" alt="Python"/\>
+\<img src="[https://img.shields.io/badge/Flask-3.1.x-000000?style=for-the-badge\&logo=flask\&logoColor=white](https://www.google.com/search?q=https://img.shields.io/badge/Flask-3.1.x-000000%3Fstyle%3Dfor-the-badge%26logo%3Dflask%26logoColor%3Dwhite)" alt="Flask"/\>
+\<img src="[https://img.shields.io/badge/MySQL-8.0-4479A1?style=for-the-badge\&logo=mysql\&logoColor=white](https://www.google.com/search?q=https://img.shields.io/badge/MySQL-8.0-4479A1%3Fstyle%3Dfor-the-badge%26logo%3Dmysql%26logoColor%3Dwhite)" alt="MySQL"/\>
+\<img src="[https://img.shields.io/badge/TailwindCSS-CDN-06B6D4?style=for-the-badge\&logo=tailwindcss\&logoColor=white](https://www.google.com/search?q=https://img.shields.io/badge/TailwindCSS-CDN-06B6D4%3Fstyle%3Dfor-the-badge%26logo%3Dtailwindcss%26logoColor%3Dwhite)" alt="TailwindCSS"/\>
+\<img src="[https://img.shields.io/badge/OpenAI-GPT--4o--mini-412991?style=for-the-badge\&logo=openai\&logoColor=white](https://www.google.com/search?q=https://img.shields.io/badge/OpenAI-GPT--4o--mini-412991%3Fstyle%3Dfor-the-badge%26logo%3Dopenai%26logoColor%3Dwhite)" alt="OpenAI"/\>
+\</p\>
 
-<p align="center">
+**HMS** là hệ thống quản lý khách sạn chuyên nghiệp, tích hợp **AI Chatbot** (OpenAI GPT) hỗ trợ nghiệp vụ. Được xây dựng trên nền tảng **Flask + MySQL** với giao diện Dashboard hiện đại từ **TailwindCSS**, hệ thống đáp ứng đầy đủ quy trình vận hành từ đặt phòng, check-in/out đến báo cáo doanh thu.
 
-&#x20; <img src="https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge\&logo=python\&logoColor=white" alt="Python"/>
+-----
 
-&#x20; <img src="https://img.shields.io/badge/Flask-3.1.x-000000?style=for-the-badge\&logo=flask\&logoColor=white" alt="Flask"/>
+## 🌟 Tính Năng Nổi Bật
 
-&#x20; <img src="https://img.shields.io/badge/MySQL-8.0-4479A1?style=for-the-badge\&logo=mysql\&logoColor=white" alt="MySQL"/>
+### 1\. 📊 Dashboard Thông Minh
 
-&#x20; <img src="https://img.shields.io/badge/TailwindCSS-CDN-06B6D4?style=for-the-badge\&logo=tailwindcss\&logoColor=white" alt="TailwindCSS"/>
+  * Theo dõi trạng thái phòng thời gian thực (Trống / Đang ở / Bảo trì).
+  * Thống kê nhanh danh sách Check-in / Check-out trong ngày.
+  * Biểu đồ doanh thu trực quan với **Chart.js**.
 
-&#x20; <img src="https://img.shields.io/badge/OpenAI-GPT--4o--mini-412991?style=for-the-badge\&logo=openai\&logoColor=white" alt="OpenAI"/>
+### 2\. 🤖 Trợ Lý AI (AI Assistant)
 
-</p>
+  * **Model:** OpenAI GPT-4o-mini hỗ trợ Tiếng Việt.
+  * **Nghiệp vụ:** Tra cứu trực tiếp Database (giá phòng, doanh thu, hóa đơn...).
+  * **Thông minh:** Hiểu đơn vị tiền tệ rút gọn (`500k`, `1tr2`) và tính toán biểu thức phức tạp.
 
+### 3\. 🛏️ Quản Lý Lưu Trú
 
+  * **Phòng & Hạng phòng:** Quản lý đa dạng hạng phòng (Suite, Deluxe...), hỗ trợ upload 5 ảnh/phòng và ghi đè giá (`price_override`).
+  * **Đặt phòng (Booking):** Mã booking tự động, kiểm tra trùng lịch, quy trình chuẩn hóa từ *Chờ xác nhận* đến *Check-out*.
 
+### 4\. 🧾 Tài Chính & Dịch Vụ
 
+  * **Hóa đơn:** Tự động tính toán bao gồm Thuế VAT 10% và giảm giá.
+  * **Dịch vụ:** Tích hợp các dịch vụ đi kèm (Ăn uống, Spa, Giặt ủi) trực tiếp vào hóa đơn phòng.
+  * **Báo cáo:** Xuất dữ liệu doanh thu chi tiết ra file `.xlsx` (Excel).
 
-<p align="center">
+-----
 
-&#x20; <b>HMS</b> là hệ thống quản lý khách sạn chuyên nghiệp, tích hợp <b>AI Chatbot</b> (OpenAI GPT) hỗ trợ nghiệp vụ, được xây dựng trên nền tảng <b>Flask + MySQL</b> với giao diện Dashboard hiện đại sử dụng <b>TailwindCSS</b>. Hệ thống phân quyền rõ ràng giữa <b>Admin</b> và <b>Lễ tân</b>, đáp ứng đầy đủ quy trình vận hành khách sạn từ đặt phòng, check-in/out, quản lý dịch vụ đến xuất hóa đơn \& báo cáo doanh thu.
+## 🏗️ Kiến Trúc Dự Án
 
-</p>
-
-
-
-\---
-
-
-
-\## 🌟 TÍNH NĂNG NỔI BẬT (Key Features)
-
-
-
-\### 1. 📊 Dashboard Thông Minh
-
-\- Tổng quan trạng thái phòng theo thời gian thực (Trống / Đang ở / Bảo trì)
-
-\- Danh sách Check-in / Check-out trong ngày
-
-\- Biểu đồ doanh thu 12 tháng (Chart.js)
-
-\- Giao diện riêng cho \*\*Admin\*\* và \*\*Lễ tân\*\*
-
-
-
-\### 2. 🤖 Trợ Lý AI (AI Assistant)
-
-\- Tích hợp \*\*OpenAI GPT-4o-mini\*\* (hoặc model tuỳ chỉnh)
-
-\- Trả lời câu hỏi nghiệp vụ bằng \*\*Tiếng Việt\*\*
-
-\- Tự động truy vấn DB: tra cứu giá phòng, doanh thu, hóa đơn, top khách hàng...
-
-\- Hiểu đơn vị tiền Việt rút gọn: `500k`, `1tr2`, `2ty3tr`
-
-\- Hỗ trợ tính toán biểu thức tiền tệ: `500k + 1tr - 200k`
-
-\- Phân quyền trả lời theo role (Admin / Lễ tân)
-
-
-
-\### 3. 🛏️ Quản Lý Phòng \& Hạng Phòng
-
-\- CRUD hạng phòng: Standard, Deluxe, Suite, Presidential, Family
-
-\- CRUD phòng: số phòng, tầng, loại giường, ảnh phòng (tối đa 5 ảnh)
-
-\- Trạng thái phòng: `Trống` · `Đã đặt` · `Đang có khách` · `Đang dọn` · `Bảo trì`
-
-\- Hỗ trợ ghi đè giá riêng từng phòng (`price\_override`)
-
-
-
-\### 4. 📅 Đặt Phòng (Booking)
-
-\- Tạo / Sửa / Huỷ booking với mã tự động (`HMS-YYYYMMDD-XXXXXX`)
-
-\- Kiểm tra trùng lịch trên cùng phòng
-
-\- Quy trình: `Chờ xác nhận` → `Đã xác nhận` → `Check-in` → `Check-out` → `Đã huỷ`
-
-\- Check-in chuẩn sau 14:00, Check-out chuẩn trước 12:00 (cảnh báo sớm/muộn)
-
-\- Quản lý đặt cọc, yêu cầu đặc biệt, ghi chú
-
-
-
-\### 5. 👥 Quản Lý Khách Hàng
-
-\- Thông tin: Họ tên, CCCD/Passport/GPLX, giới tính, ngày sinh, SĐT, email
-
-\- Hỗ trợ khách quốc tế (nationality)
-
-\- Upload ảnh đại diện khách hàng
-
-\- Xoá mềm (soft delete)
-
-
-
-\### 6. 🧾 Hóa Đơn (Invoice)
-
-\- Tự động tính: `Tiền phòng + Dịch vụ - Giảm giá + VAT 10%`
-
-\- Mã hóa đơn tự sinh (`INV-YYYYMMDD-XXXXXX`)
-
-\- Phương thức thanh toán: Tiền mặt / Thẻ / Chuyển khoản / Kết hợp
-
-\- Trạng thái: Chưa thanh toán / Thanh toán một phần / Đã thanh toán
-
-
-
-\### 7. 🍽️ Quản Lý Dịch Vụ
-
-\- Danh mục: Ăn uống, Giặt ủi, Đặt xe, Spa, Khác
-
-\- Thêm dịch vụ vào booking (chỉ khi đang ở - `CHECKED\_IN`)
-
-\- Tính giá theo số lượng × đơn giá
-
-
-
-\### 8. 📈 Báo Cáo \& Xuất Excel
-
-\- Báo cáo doanh thu theo tháng/năm (biểu đồ)
-
-\- Xuất file `.xlsx` chi tiết doanh thu (openpyxl)
-
-\- Chỉ Admin mới có quyền truy cập
-
-
-
-\### 9. 👤 Quản Lý Nhân Viên \& Phân Quyền
-
-\- 2 role: \*\*Admin\*\* (toàn quyền) và \*\*Receptionist\*\* (lễ tân)
-
-\- Quản lý tài khoản: tạo / khoá / xoá mềm
-
-\- Đổi mật khẩu, cập nhật profile, avatar
-
-\- Theo dõi lần đăng nhập cuối, số lần thử đăng nhập sai
-
-
-
-\---
-
-
-
-\## 🏗️ KIẾN TRÚC DỰ ÁN (Project Architecture)
-
-
-
-```
-
-python\_khachsan/
-
+```text
+python_khachsan/
 ├── app/
-
-│   ├── blueprints/          # 📌 Các route/controller (12 blueprints)
-
-│   │   ├── assistant.py     #     AI Chatbot API
-
-│   │   ├── auth.py          #     Đăng nhập, đăng xuất, đổi mật khẩu
-
-│   │   ├── bookings.py      #     CRUD đặt phòng, check-in/out
-
-│   │   ├── customers.py     #     CRUD khách hàng
-
-│   │   ├── dashboard.py     #     Trang tổng quan
-
-│   │   ├── invoices.py      #     CRUD hóa đơn
-
-│   │   ├── profile.py       #     Cập nhật thông tin cá nhân
-
-│   │   ├── reports.py       #     Báo cáo + xuất Excel
-
-│   │   ├── room\_types.py    #     CRUD hạng phòng
-
-│   │   ├── rooms.py         #     CRUD phòng
-
-│   │   ├── services.py      #     CRUD dịch vụ
-
-│   │   └── users.py         #     Quản lý nhân viên (Admin)
-
-│   ├── models/              # 📦 ORM Models (SQLAlchemy)
-
-│   │   ├── booking.py       #     Booking + BookingService
-
-│   │   ├── customer.py      #     Khách hàng
-
-│   │   ├── invoice.py       #     Hóa đơn
-
-│   │   ├── room.py          #     Phòng
-
-│   │   ├── room\_type.py     #     Hạng phòng
-
-│   │   ├── service.py       #     Dịch vụ
-
-│   │   ├── user.py          #     Tài khoản nhân viên
-
-│   │   └── mixins.py        #     Soft delete mixin
-
-│   ├── services/            # ⚙️ Business Logic Layer
-
-│   │   ├── assistant\_queries.py  # Truy vấn DB cho AI
-
-│   │   ├── booking\_service.py    # Logic đặt phòng
-
-│   │   ├── chat\_service.py       # Gọi OpenAI API
-
-│   │   ├── image\_service.py      # Upload/xử lý ảnh
-
-│   │   └── invoice\_service.py    # Logic hóa đơn
-
-│   ├── templates/           # 🎨 Jinja2 Templates
-
-│   │   ├── base.html        #     Layout chính (sidebar + topbar)
-
-│   │   ├── assistant/       #     Giao diện chatbot
-
-│   │   ├── auth/            #     Đăng nhập / đổi mật khẩu
-
-│   │   ├── bookings/        #     Đặt phòng
-
-│   │   ├── customers/       #     Khách hàng
-
-│   │   ├── dashboard/       #     Dashboard (admin / receptionist)
-
-│   │   ├── invoices/        #     Hóa đơn
-
-│   │   ├── profile/         #     Hồ sơ cá nhân
-
-│   │   ├── reports/         #     Báo cáo
-
-│   │   ├── room\_types/      #     Hạng phòng
-
-│   │   ├── rooms/           #     Phòng
-
-│   │   ├── services/        #     Dịch vụ
-
-│   │   └── users/           #     Nhân viên
-
-│   ├── static/              # 🖼️ Static Files
-
-│   │   ├── css/custom.css   #     CSS tuỳ chỉnh
-
-│   │   ├── js/main.js       #     JavaScript chính
-
-│   │   ├── js/image-preview.js   # Preview upload ảnh
-
-│   │   └── images/          #     Ảnh upload (avatars, rooms,...)
-
-│   ├── utils/               # 🔧 Tiện ích
-
-│   │   ├── decorators.py    #     @admin\_required,...
-
-│   │   ├── formatters.py    #     format\_currency, format\_date
-
-│   │   ├── helpers.py       #     Hàm helper chung
-
-│   │   ├── labels.py        #     Mapping enum → tiếng Việt
-
-│   │   └── validators.py    #     Validate dữ liệu đầu vào
-
-│   ├── \_\_init\_\_.py          # 🏭 App Factory (create\_app)
-
-│   ├── config.py            # ⚙️ Cấu hình (DB, upload, session,...)
-
-│   └── extensions.py        # 🔌 Flask Extensions (SQLAlchemy, Login,...)
-
-├── migrations/              # 🔄 Alembic migrations
-
-├── scripts/
-
-│   ├── seed.py              # 🌱 Seed dữ liệu mẫu
-
-│   └── download\_images.py   # 📥 Tải ảnh mẫu
-
-├── .env.example             # 📋 Mẫu biến môi trường
-
-├── hotel\_db.sql             # 💾 SQL dump cơ sở dữ liệu
-
-├── manage.py                # 🖥️ Flask CLI
-
-├── run.py                   # 🚀 Entry point chạy server
-
-├── requirements.txt         # 📦 Dependencies
-
-├── prompt.md                # 🤖 System prompt cho AI
-
-└── rules.md                 # 📜 Rules inject cho AI
-
+│   ├── blueprints/          # Điều hướng & Logic (12 modules: AI, Auth, Booking...)
+│   ├── models/              # Cấu trúc Database (SQLAlchemy Models)
+│   ├── services/            # Tầng xử lý nghiệp vụ & AI Service
+│   ├── templates/           # Giao diện Jinja2 (TailwindCSS)
+│   ├── static/              # Assets (CSS, JS, Images)
+│   └── utils/               # Tiện ích bổ trợ (Validators, Formatters)
+├── scripts/                 # Script khởi tạo dữ liệu (Seed)
+├── .env.example             # Cấu hình biến môi trường mẫu
+├── hotel_db.sql             # Database dump
+├── run.py                   # Entry point
+└── requirements.txt         # Danh sách thư viện
 ```
 
+-----
 
+## 🚀 Hướng Dẫn Cài Đặt
 
-\---
-
-
-
-\## 🛠️ CÔNG NGHỆ SỬ DỤNG (Tech Stack)
-
-
-
-| Thành phần | Công nghệ |
-
-|---|---|
-
-| \*\*Backend\*\* | Python 3.11+, Flask 3.1.x |
-
-| \*\*ORM / Migration\*\* | Flask-SQLAlchemy , Flask-Migrate (Alembic) |
-
-| \*\*Database\*\* | MySQL 8.0 |
-
-| \*\*Authentication\*\* | Flask-Login , Flask-Bcrypt |
-
-| \*\*Frontend\*\* | TailwindCSS (CDN), Jinja2, Vanilla JavaScript |
-
-| \*\*UI Components\*\* | Font Awesome 6.5, Google Fonts (Playfair Display + Inter) |
-
-| \*\*Charts\*\* | Chart.js  |
-
-| \*\*AI Chatbot\*\* | OpenAI API (GPT-4o-mini) |
-
-| \*\*Image Processing\*\* | Pillow  |
-
-| \*\*Excel Export\*\* | openpyxl |
-
-| \*\*PDF/Screenshot\*\* | Playwright  |
-
-| \*\*HTTP Client\*\* | Requests |
-
-| \*\*Environment\*\* | python-dotenv|
-
-
-
-\---
-
-
-
-\## 🚀 HƯỚNG DẪN CÀI ĐẶT \& SỬ DỤNG
-
-
-
-\### 📋 Yêu cầu hệ thống
-
-
-
-\- \*\*Python\*\* >= 3.11
-
-\- \*\*MySQL\*\* >= 8.0
-
-\- \*\*Git\*\*
-
-\- (Tuỳ chọn) \*\*OpenAI API Key\*\* — nếu muốn dùng tính năng AI Chatbot
-
-
-
-\### 1️⃣ Clone dự án
-
-
+### 1\. Chuẩn bị môi trường
 
 ```bash
-
+# Clone dự án
 git clone <repository-url>
+cd python_khachsan
 
-cd python\_khachsan
-
-```
-
-
-
-\### 2️⃣ Tạo môi trường ảo \& cài thư viện
-
-
-
-```bash
-
+# Tạo và kích hoạt môi trường ảo
 python -m venv venv
+source venv/bin/activate  # Linux/Mac
+# venv\Scripts\activate   # Windows
 
-
-
-\# Windows
-
-venv\\Scripts\\activate
-
-
-
-\# macOS / Linux
-
-source venv/bin/activate
-
-
-
+# Cài đặt thư viện
 pip install -r requirements.txt
-
 ```
 
+### 2\. Cấu hình Database & Environment
 
+1.  Tạo Database `hotel_db` trong MySQL.
+2.  Import dữ liệu: `mysql -u root -p hotel_db < hotel_db.sql`.
+3.  Copy `.env.example` thành `.env` và điền các thông số:
+      * `MYSQL_PASSWORD`, `SECRET_KEY`.
+      * `OPENAI_API_KEY` (nếu dùng AI).
 
-\### 3️⃣ Cấu hình biến môi trường
-
-
+### 3\. Khởi chạy
 
 ```bash
-
-cp .env.example .env
-
-```
-
-
-
-Mở file `.env` và điền thông tin:
-
-
-
-```env
-
-MYSQL\_HOST=localhost
-
-MYSQL\_PORT=3306
-
-MYSQL\_DB=hotel\_db
-
-MYSQL\_USER=root
-
-MYSQL\_PASSWORD=your\_password\_here
-
-SECRET\_KEY=your-super-secret-key-change-me
-
-DEBUG=True
-
-
-
-\# (Tuỳ chọn) AI Chatbot
-
-OPENAI\_API\_KEY=sk-xxxxxxxxxxxxxxxx
-
-OPENAI\_MODEL=gpt-4o-mini
-
-OPENAI\_BASE\_URL=https://api.openai.com/v1
-
-```
-
-
-
-\### 4️⃣ Tạo Database \& Import dữ liệu mẫu
-
-
-
-```bash
-
-\# Tạo database trong MySQL
-
-mysql -u root -p -e "CREATE DATABASE hotel\_db CHARACTER SET utf8mb4 COLLATE utf8mb4\_0900\_ai\_ci;"
-
-
-
-\# Import SQL dump (có sẵn dữ liệu mẫu)
-
-mysql -u root -p hotel\_db < hotel\_db.sql
-
-```
-
-
-
-\### 5️⃣ Chạy ứng dụng
-
-
-
-```bash
-
 python run.py
-
 ```
 
+Truy cập: **http://localhost:5000**
 
+-----
 
-Truy cập: \*\*http://localhost:5000\*\*
+## 🔐 Phân Quyền & Tài Khoản
 
+| Vai trò | Username | Password | Quyền hạn |
+| :--- | :--- | :--- | :--- |
+| **Admin** | `admin` | `admin123` | Toàn quyền hệ thống, xem báo cáo, quản lý nhân viên. |
+| **Lễ tân** | `letan1` | `letan123` | Thực hiện nghiệp vụ đặt phòng, check-in/out, khách hàng. |
 
+-----
 
-\### 6️⃣ Tài khoản mặc định
+## 🤖 Khả Năng Của AI Assistant
 
+Bạn có thể hỏi Chatbot các câu như:
 
+  * *"Phòng 203 giá bao nhiêu?"*
+  * *"Tổng doanh thu tháng này là bao nhiêu?"*
+  * *"Liệt kê các phòng còn trống trong hôm nay."*
+  * *"Tính giúp tôi: 500k + 1tr2 - 200k."*
 
-| Vai trò | Username | Password | Mô tả |
+-----
 
-|---|---|---|---|
+> [\!IMPORTANT]
+> **Lưu ý:** Hãy đổi mật khẩu mặc định ngay sau khi đăng nhập lần đầu để đảm bảo an toàn hệ thống.
 
-| 🔑 Admin | `admin` | `admin123` | Toàn quyền quản trị |
-
-| 👤 Lễ tân | `letan1` | `letan123` | Quyền lễ tân |
-
-| 👤 Lễ tân | `letan2` | `letan123` | Quyền lễ tân |
-
-
-
-> ⚠️ \*\*Lưu ý:\*\* Hãy đổi mật khẩu mặc định ngay sau khi đăng nhập lần đầu!
-
-
-
-\---
-
-
-
-\## 🔐 PHÂN QUYỀN HỆ THỐNG
-
-
-
-| Chức năng | Admin | Lễ tân |
-
-|---|:---:|:---:|
-
-| Dashboard | ✅ (đầy đủ) | ✅ (rút gọn) |
-
-| Trợ lý AI | ✅ | ✅ |
-
-| Quản lý nhân viên | ✅ | ❌ |
-
-| Hạng phòng (CRUD) | ✅ | 👁️ Xem |
-
-| Quản lý phòng | ✅ | 👁️ Xem |
-
-| Khách hàng (CRUD) | ✅ | ✅ |
-
-| Đặt phòng | ✅ | ✅ (giới hạn) |
-
-| Check-in / Check-out | ✅ | ✅ |
-
-| Hóa đơn | ✅ | ✅ (của mình) |
-
-| Dịch vụ (CRUD) | ✅ | ❌ |
-
-| Báo cáo \& Xuất Excel | ✅ | ❌ |
-
-
-
-
-
-\## 🤖 TÍNH NĂNG AI CHATBOT
-
-
-
-Hệ thống tích hợp \*\*AI Assistant\*\* có khả năng:
-
-
-
-| Loại câu hỏi | Ví dụ |
-
-|---|---|
-
-| 💰 Tra giá phòng | \*"Phòng 203 giá bao nhiêu?"\* |
-
-| 📊 Doanh thu | \*"Tổng doanh thu tháng 3?"\* |
-
-| 🔍 Tra booking | \*"Tra HMS-20260308-000001"\* |
-
-| 🏆 Top khách hàng | \*"Top 5 khách chi nhiều nhất?"\* |
-
-| 🛏️ Phòng trống | \*"Phòng trống hôm nay?"\* |
-
-| 🧮 Tính tiền VN | \*"500k + 1tr2 - 200k = ?"\* |
-
-| 📋 Thống kê booking | \*"Thống kê booking tổng hợp"\* |
-
-| 🍽️ Top dịch vụ | \*"Top dịch vụ phổ biến nhất?"\* |
-
-
-
-\---
-
-
-
-\## 🌐 DEMO \& DEPLOY
-
-
-
-> 🔗 \*\*Link Demo:\*\* \[http://103.75.184.108:5000/](http://103.75.184.108:5000/)
-
-
-
-\---
-
-
-
-
-
-
-
+🔗 **Link Demo:** [http://103.75.184.108:5000/](http://103.75.184.108:5000/)
